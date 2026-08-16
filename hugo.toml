@@ -1,0 +1,12 @@
+baseURL = 'https://mvalentne.github.io/Biblioteca_EPETN18/'
+locale = 'es-es'
+title = 'Biblioteca EPET N° 18'
+theme = 'Berenice'
+timeout = '120s'
+
+[params]
+    HugoFooter = true
+
+    [params.author]
+    name = "Biblioteca EPET N° 18"
+    email = ""

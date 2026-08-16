@@ -1,0 +1,14 @@
+# Hugo output directory
+public/
+resources/_gen/
+.hugo_build.lock
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
