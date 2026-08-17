@@ -1,112 +1,332 @@
 {{ define "main" }}
 <main class="max-w-7xl mx-auto px-4 py-8">
-  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-gray-200 gap-4">
+  <!-- Cabecera de la Biblioteca -->
+  <div class="mb-8 pb-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
-      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
-        {{ if .IsHome }}
-          Colecciones & Géneros
-        {{ else if eq .Section "generos" }}
-          Géneros Literarios
-        {{ else }}
-          {{ .Title }}
-        {{ end }}
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
+        <span>Catálogo por Categorías</span>
       </h1>
-      <p class="text-gray-500 text-sm mt-1">Explora los libros de la Biblioteca EPET N° 18 por género o colección.</p>
+      <p class="text-gray-500 text-sm mt-1">
+        Categorías y libros autogenerados en base al catálogo de ISBNs y la API de Google Books.
+      </p>
     </div>
 
-    {{ if .IsHome }}
-    <div class="flex items-center space-x-2">
-      <span class="text-xs font-semibold px-3 py-1 bg-blue-100 text-blue-800 rounded-full">Catálogo Google Books</span>
+    <!-- Buscador / Filtro Rápido -->
+    <div class="flex items-center gap-2">
+      <div class="relative">
+        <input id="search-input" type="text" placeholder="Buscar por título, autor o ISBN..." 
+               class="pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64 md:w-80 shadow-sm" />
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+      <button id="clear-search" class="hidden text-xs text-gray-500 hover:text-gray-800 underline">Limpiar</button>
     </div>
-    {{ end }}
   </div>
 
-  {{ partial "breadcrumb.html" . }}
+  <!-- Estado de Carga -->
+  <div id="library-loading" class="flex flex-col items-center justify-center py-20 text-gray-500">
+    <svg class="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+    <p class="text-base font-semibold text-gray-700">Consultando Google Books y organizando categorías...</p>
+    <p id="loading-progress" class="text-xs text-gray-400 mt-1">0% completado</p>
+  </div>
 
-  <!-- Listado de Colecciones / Álbumes de Géneros -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    {{ range .Pages }}
-      {{ $cover := "" }}
-      {{ if .Params.featured_image }}
-        {{ $coverRes := .Resources.GetMatch .Params.featured_image }}
-        {{ if and $coverRes (eq $coverRes.MediaType.MainType "image") }}
-          {{ $thumb := $coverRes.Filter (slice images.AutoOrient (images.Process "fit 600x600")) }}
-          {{ $cover = $thumb.RelPermalink }}
-        {{ else }}
-          {{ $cover = .Params.featured_image }}
-        {{ end }}
-      {{ end }}
+  <!-- Contenedor Principal de Bloques por Categoría -->
+  <div id="categories-container" class="space-y-12 hidden">
+    <!-- Aquí se inyectan los bloques de cada categoría -->
+  </div>
 
-      <div class="group relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-           {{ if .Params.isbn_cover }}data-isbn-cover="{{ .Params.isbn_cover }}"{{ end }}
-           {{ if .Params.google_genre }}data-google-genre="{{ .Params.google_genre }}"{{ end }}>
-        <a href="{{ .RelPermalink }}" class="block relative w-full h-56 bg-slate-100 overflow-hidden flex items-center justify-center">
-          {{ if $cover }}
-            <img src="{{ $cover }}" class="genre-card-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ .Title }}">
-          {{ else }}
-            <div class="genre-card-placeholder w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-blue-900 to-indigo-950 text-white">
-              <span class="text-4xl mb-2">📚</span>
-              <span class="font-bold text-lg leading-tight px-2">{{ .Title }}</span>
-              <span class="text-xs text-blue-200 mt-1 uppercase tracking-wider">Explorar Género</span>
+  <!-- Modal de Detalle del Libro -->
+  <div id="book-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeBookModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div class="flex flex-col sm:flex-row gap-6">
+        <div class="flex-shrink-0 flex justify-center">
+          <img id="modal-cover" class="w-40 h-60 object-cover rounded-lg shadow-md border" src="" alt="Portada">
+        </div>
+        <div class="flex-1 flex flex-col justify-between">
+          <div>
+            <span id="modal-category" class="inline-block bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase tracking-wide mb-2"></span>
+            <h2 id="modal-title" class="text-2xl font-bold text-gray-900 leading-tight"></h2>
+            <p id="modal-authors" class="text-sm font-semibold text-blue-700 mt-1"></p>
+
+            <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-500 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+              <span id="modal-publisher"></span>
+              <span id="modal-date"></span>
+              <span id="modal-pages"></span>
+              <span id="modal-isbn"></span>
             </div>
-            <img class="genre-card-img hidden w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="" alt="{{ .Title }}">
-          {{ end }}
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-4">
-            <h2 class="text-white text-xl font-bold drop-shadow-md group-hover:text-blue-200 transition">
-              {{ .Title }}
-            </h2>
-            {{ with .Params.description }}
-            <p class="text-gray-300 text-xs mt-1 line-clamp-1 drop-shadow">{{ . }}</p>
-            {{ end }}
-          </div>
-        </a>
 
-        <div class="p-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-600 font-medium">
-          <span>Ver colección &rarr;</span>
-          <span class="bg-white border px-2 py-0.5 rounded-full text-blue-600">Catálogo</span>
+            <div class="mt-4">
+              <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Sinopsis</h4>
+              <p id="modal-desc" class="text-sm text-gray-600 mt-1 max-h-48 overflow-y-auto leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition">
+              <span>Ver en Google Books</span>
+              <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <button onclick="closeBookModal()" class="text-xs text-gray-500 hover:text-gray-800 font-medium">Cerrar</button>
+          </div>
         </div>
       </div>
-    {{ end }}
+    </div>
   </div>
-
-  {{ .Content }}
 </main>
 
+<!-- Inyección de la lista de ISBNs configurados en hugo.toml -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const cards = document.querySelectorAll('[data-isbn-cover], [data-google-genre]');
-  cards.forEach(card => {
-    const isbn = card.getAttribute('data-isbn-cover');
-    const genre = card.getAttribute('data-google-genre');
-    const imgEl = card.querySelector('.genre-card-img');
-    const placeholder = card.querySelector('.genre-card-placeholder');
+window.LIBRARY_ISBNS = {{ .Site.Params.isbns | default (slice "9789500700764" "9788437604947" "9780131103627" "9780140328721" "9788497592208" "9788420685625" "9786073837873" "9788445071403" "9789871138012") | jsonify }};
+</script>
 
-    if (!imgEl) return;
-    if (imgEl.getAttribute('src')) return; // Ya tiene imagen definida
+<script>
+let globalBooksList = [];
 
-    let query = '';
-    if (isbn) query = 'isbn:' + isbn;
-    else if (genre) query = 'subject:' + genre;
+// Mapeo amigable de categorías en inglés a español si aplica
+const categoryTranslations = {
+  "fiction": "Ficción / Novela",
+  "juvenile fiction": "Literatura Juvenil / Infantil",
+  "computers": "Informática & Tecnología",
+  "science": "Ciencias & Física",
+  "history": "Historia & Crónicas",
+  "philosophy": "Filosofía & Pensamiento",
+  "poetry": "Poesía & Clásicos",
+  "education": "Educación & Pedagogía",
+  "technology & engineering": "Tecnología & Ingeniería",
+  "art": "Arte & Diseño",
+  "drama": "Teatro & Dramaturgia",
+  "comics & graphic novels": "Cómics & Novela Gráfica",
+  "social science": "Ciencias Sociales",
+  "literary criticism": "Crítica & Estudios Literarios"
+};
 
-    if (!query) return;
+function formatCategory(rawCat) {
+  if (!rawCat) return "General / Sin Categoría";
+  const firstPart = rawCat.split('/')[0].trim();
+  const lower = firstPart.toLowerCase();
+  if (categoryTranslations[lower]) return categoryTranslations[lower];
+  return firstPart.charAt(0).toUpperCase() + firstPart.slice(1);
+}
 
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=1`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.items && data.items.length > 0) {
-          const item = data.items[0];
-          let thumb = item.volumeInfo.imageLinks ? (item.volumeInfo.imageLinks.thumbnail || item.volumeInfo.imageLinks.smallThumbnail) : '';
-          if (thumb) {
-            thumb = thumb.replace(/^http:\/\//i, 'https://');
-            imgEl.src = thumb;
-            imgEl.classList.remove('hidden');
-            if (placeholder) placeholder.classList.add('hidden');
-          }
-        }
-      })
-      .catch(console.error);
+function openBookModal(bookId) {
+  const book = globalBooksList.find(b => b.id === bookId);
+  if (!book) return;
+  const info = book.volumeInfo || {};
+
+  document.getElementById('modal-title').textContent = info.title || 'Sin título';
+  document.getElementById('modal-authors').textContent = info.authors ? `Autor(es): ${info.authors.join(', ')}` : 'Autor desconocido';
+  
+  let thumb = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
+  if (thumb) {
+    thumb = thumb.replace(/^http:\/\//i, 'https://');
+    document.getElementById('modal-cover').src = thumb;
+    document.getElementById('modal-cover').classList.remove('hidden');
+  } else {
+    document.getElementById('modal-cover').classList.add('hidden');
+  }
+
+  document.getElementById('modal-category').textContent = (info.categories && formatCategory(info.categories[0])) || 'General';
+  document.getElementById('modal-publisher').textContent = info.publisher ? `Editorial: ${info.publisher} •` : '';
+  document.getElementById('modal-date').textContent = info.publishedDate ? `Año: ${info.publishedDate.substring(0, 4)} •` : '';
+  document.getElementById('modal-pages').textContent = info.pageCount ? `${info.pageCount} págs. •` : '';
+  
+  let isbn = '';
+  if (info.industryIdentifiers) {
+    const obj = info.industryIdentifiers.find(i => i.type.includes('13')) || info.industryIdentifiers[0];
+    if (obj) isbn = `ISBN: ${obj.identifier}`;
+  }
+  document.getElementById('modal-isbn').textContent = isbn;
+  document.getElementById('modal-desc').innerHTML = info.description || 'No hay sinopsis disponible para este ejemplar.';
+  
+  const linkEl = document.getElementById('modal-link');
+  if (info.infoLink) {
+    linkEl.href = info.infoLink;
+    linkEl.classList.remove('hidden');
+  } else {
+    linkEl.classList.add('hidden');
+  }
+
+  document.getElementById('book-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBookModal() {
+  document.getElementById('book-modal').classList.add('hidden');
+  document.body.style.overflow = 'auto';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeBookModal();
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+  const isbns = window.LIBRARY_ISBNS || [];
+  const container = document.getElementById('categories-container');
+  const loadingEl = document.getElementById('library-loading');
+  const progressEl = document.getElementById('loading-progress');
+  const searchInput = document.getElementById('search-input');
+  const clearBtn = document.getElementById('clear-search');
+
+  if (isbns.length === 0) {
+    loadingEl.innerHTML = '<p class="text-gray-500">No hay ISBNs configurados en hugo.toml.</p>';
+    return;
+  }
+
+  let loadedCount = 0;
+  const bookPromises = isbns.map(async (isbn, index) => {
+    try {
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn.trim())}&maxResults=1`);
+      const data = await res.json();
+      loadedCount++;
+      if (progressEl) progressEl.textContent = `${Math.round((loadedCount / isbns.length) * 100)}% (${loadedCount}/${isbns.length} libros procesados)`;
+      
+      if (data.items && data.items.length > 0) {
+        const book = data.items[0];
+        book._queryIsbn = isbn.trim();
+        return book;
+      }
+    } catch (e) {
+      console.error(`Error buscando ISBN ${isbn}:`, e);
+    }
+    return null;
+  });
+
+  const rawBooks = await Promise.all(bookPromises);
+  globalBooksList = rawBooks.filter(Boolean);
+
+  renderLibrary(globalBooksList);
+
+  loadingEl.classList.add('hidden');
+  container.classList.remove('hidden');
+
+  // Funcionalidad de Búsqueda y Filtro en Vivo
+  searchInput.addEventListener('input', function(e) {
+    const q = e.target.value.toLowerCase().trim();
+    if (q) clearBtn.classList.remove('hidden');
+    else clearBtn.classList.add('hidden');
+
+    if (!q) {
+      renderLibrary(globalBooksList);
+      return;
+    }
+
+    const filtered = globalBooksList.filter(book => {
+      const info = book.volumeInfo || {};
+      const title = (info.title || '').toLowerCase();
+      const authors = (info.authors || []).join(' ').toLowerCase();
+      const isbn = book._queryIsbn || '';
+      const cat = (info.categories || []).join(' ').toLowerCase();
+      return title.includes(q) || authors.includes(q) || isbn.includes(q) || cat.includes(q);
+    });
+
+    renderLibrary(filtered, q);
+  });
+
+  clearBtn.addEventListener('click', function() {
+    searchInput.value = '';
+    clearBtn.classList.add('hidden');
+    renderLibrary(globalBooksList);
   });
 });
+
+function renderLibrary(books, filterQuery = '') {
+  const container = document.getElementById('categories-container');
+  if (!container) return;
+
+  if (books.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-16 bg-gray-50 rounded-2xl border border-gray-100">
+        <span class="text-4xl">🔍</span>
+        <p class="text-gray-700 font-semibold mt-3">No se encontraron libros que coincidan con la búsqueda.</p>
+        <p class="text-xs text-gray-400 mt-1">Intenta con otro título, autor o ISBN.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Agrupar libros dinámicamente por categoría de Google Books
+  const categoriesMap = {};
+  books.forEach(book => {
+    const rawCategory = (book.volumeInfo && book.volumeInfo.categories && book.volumeInfo.categories[0]) || 'General';
+    const categoryName = formatCategory(rawCategory);
+
+    if (!categoriesMap[categoryName]) {
+      categoriesMap[categoryName] = [];
+    }
+    categoriesMap[categoryName].push(book);
+  });
+
+  // Ordenar categorías alfabéticamente
+  const sortedCategories = Object.keys(categoriesMap).sort();
+
+  let html = '';
+  sortedCategories.forEach(catName => {
+    const catBooks = categoriesMap[catName];
+    
+    html += `
+      <section class="category-block bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <!-- Cabecera de la Categoría -->
+        <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-100">
+          <div class="flex items-center space-x-3">
+            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📂</span>
+            <div>
+              <h2 class="text-xl font-bold text-gray-900 leading-none">${catName}</h2>
+              <span class="text-xs text-gray-400 font-medium">${catBooks.length} ${catBooks.length === 1 ? 'libro' : 'libros'}</span>
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
+            Categoría Autogenerada
+          </span>
+        </div>
+
+        <!-- Portadas de Libros dentro de este bloque de categoría -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          ${catBooks.map(book => {
+            const info = book.volumeInfo || {};
+            let thumb = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
+            if (thumb) thumb = thumb.replace(/^http:\/\//i, 'https://');
+            const title = info.title || 'Sin título';
+            const author = info.authors ? info.authors[0] : 'Autor desconocido';
+
+            return `
+              <div class="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between border border-gray-100"
+                   onclick="openBookModal('${book.id}')">
+                <div class="w-full aspect-[2/3] bg-gray-100 overflow-hidden relative flex items-center justify-center">
+                  ${thumb ? `
+                    <img src="${thumb}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                  ` : `
+                    <div class="p-3 text-center text-xs text-gray-400 font-semibold flex flex-col items-center">
+                      <span class="text-2xl mb-1">📖</span>
+                      <span class="line-clamp-3">${title}</span>
+                    </div>
+                  `}
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="bg-white/90 text-gray-900 text-[11px] font-bold px-2.5 py-1 rounded-full shadow">Ver Detalle 🔍</span>
+                  </div>
+                </div>
+                <div class="p-2.5">
+                  <h3 class="font-bold text-gray-900 text-xs line-clamp-2 leading-tight group-hover:text-blue-600 transition" title="${title}">${title}</h3>
+                  <p class="text-[11px] text-gray-500 font-medium line-clamp-1 mt-1">${author}</p>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </section>
+    `;
+  });
+
+  container.innerHTML = html;
+}
 </script>
 {{ end }}

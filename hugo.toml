@@ -10,3 +10,19 @@ timeout = '120s'
     [params.author]
     name = "Biblioteca EPET N° 18"
     email = ""
+
+    # LISTA DE ISBNs DE LA BIBLIOTECA
+    # Solo agrega aquí los códigos ISBN de los libros que quieras incorporar.
+    # El sistema consultará Google Books, obtendrá los géneros/categorías
+    # automáticamente y los organizará en bloques en la página principal.
+    isbns = [
+        "9789500700764", # El túnel - Ernesto Sabato (Fiction / Classics)
+        "9788437604947", # Cien años de soledad - Gabriel García Márquez (Fiction / Magical Realism)
+        "9780131103627", # The C Programming Language - Kernighan & Ritchie (Computers / Programming)
+        "9780140328721", # Fantastic Mr Fox - Roald Dahl (Juvenile Fiction)
+        "9788497592208", # 1984 - George Orwell (Fiction / Science Fiction)
+        "9788420685625", # El arte de la guerra - Sun Tzu (History / Philosophy)
+        "9786073837873", # Clean Code - Robert C. Martin (Computers)
+        "9788445071403", # El Señor de los Anillos - J.R.R. Tolkien (Fiction / Fantasy)
+        "9789871138012"  # Martín Fierro - José Hernández (Poetry / Classics)
+    ]
