@@ -144,3 +144,15 @@ timeout = '120s'
     description = "Ejemplar catalogado en la Biblioteca EPET N° 18."
     cover = "https://covers.openlibrary.org/b/isbn/9583311251-L.jpg"
     pdf = ""
+
+    [[params.libros]]
+    isbn = "9783140464079"
+    title = "Le Petit Prince. ( Französische Ausgabe). (Lernmaterialien)"
+    authors = ["Antoine de Saint-Exupéry"]
+    category = "Otros"
+    publisher = "Schöningh im Westermann"
+    year = "1991"
+    pages = 96
+    description = ""
+    cover = "images/covers/9783140464079.jpg"
+    pdf = ""
