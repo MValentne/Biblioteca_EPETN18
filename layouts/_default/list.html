@@ -1,0 +1,112 @@
+{{ define "main" }}
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-gray-200 gap-4">
+    <div>
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        {{ if .IsHome }}
+          Colecciones & Géneros
+        {{ else if eq .Section "generos" }}
+          Géneros Literarios
+        {{ else }}
+          {{ .Title }}
+        {{ end }}
+      </h1>
+      <p class="text-gray-500 text-sm mt-1">Explora los libros de la Biblioteca EPET N° 18 por género o colección.</p>
+    </div>
+
+    {{ if .IsHome }}
+    <div class="flex items-center space-x-2">
+      <span class="text-xs font-semibold px-3 py-1 bg-blue-100 text-blue-800 rounded-full">Catálogo Google Books</span>
+    </div>
+    {{ end }}
+  </div>
+
+  {{ partial "breadcrumb.html" . }}
+
+  <!-- Listado de Colecciones / Álbumes de Géneros -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {{ range .Pages }}
+      {{ $cover := "" }}
+      {{ if .Params.featured_image }}
+        {{ $coverRes := .Resources.GetMatch .Params.featured_image }}
+        {{ if and $coverRes (eq $coverRes.MediaType.MainType "image") }}
+          {{ $thumb := $coverRes.Filter (slice images.AutoOrient (images.Process "fit 600x600")) }}
+          {{ $cover = $thumb.RelPermalink }}
+        {{ else }}
+          {{ $cover = .Params.featured_image }}
+        {{ end }}
+      {{ end }}
+
+      <div class="group relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+           {{ if .Params.isbn_cover }}data-isbn-cover="{{ .Params.isbn_cover }}"{{ end }}
+           {{ if .Params.google_genre }}data-google-genre="{{ .Params.google_genre }}"{{ end }}>
+        <a href="{{ .RelPermalink }}" class="block relative w-full h-56 bg-slate-100 overflow-hidden flex items-center justify-center">
+          {{ if $cover }}
+            <img src="{{ $cover }}" class="genre-card-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ .Title }}">
+          {{ else }}
+            <div class="genre-card-placeholder w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-blue-900 to-indigo-950 text-white">
+              <span class="text-4xl mb-2">📚</span>
+              <span class="font-bold text-lg leading-tight px-2">{{ .Title }}</span>
+              <span class="text-xs text-blue-200 mt-1 uppercase tracking-wider">Explorar Género</span>
+            </div>
+            <img class="genre-card-img hidden w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="" alt="{{ .Title }}">
+          {{ end }}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <h2 class="text-white text-xl font-bold drop-shadow-md group-hover:text-blue-200 transition">
+              {{ .Title }}
+            </h2>
+            {{ with .Params.description }}
+            <p class="text-gray-300 text-xs mt-1 line-clamp-1 drop-shadow">{{ . }}</p>
+            {{ end }}
+          </div>
+        </a>
+
+        <div class="p-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-600 font-medium">
+          <span>Ver colección &rarr;</span>
+          <span class="bg-white border px-2 py-0.5 rounded-full text-blue-600">Catálogo</span>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+
+  {{ .Content }}
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const cards = document.querySelectorAll('[data-isbn-cover], [data-google-genre]');
+  cards.forEach(card => {
+    const isbn = card.getAttribute('data-isbn-cover');
+    const genre = card.getAttribute('data-google-genre');
+    const imgEl = card.querySelector('.genre-card-img');
+    const placeholder = card.querySelector('.genre-card-placeholder');
+
+    if (!imgEl) return;
+    if (imgEl.getAttribute('src')) return; // Ya tiene imagen definida
+
+    let query = '';
+    if (isbn) query = 'isbn:' + isbn;
+    else if (genre) query = 'subject:' + genre;
+
+    if (!query) return;
+
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=1`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.items && data.items.length > 0) {
+          const item = data.items[0];
+          let thumb = item.volumeInfo.imageLinks ? (item.volumeInfo.imageLinks.thumbnail || item.volumeInfo.imageLinks.smallThumbnail) : '';
+          if (thumb) {
+            thumb = thumb.replace(/^http:\/\//i, 'https://');
+            imgEl.src = thumb;
+            imgEl.classList.remove('hidden');
+            if (placeholder) placeholder.classList.add('hidden');
+          }
+        }
+      })
+      .catch(console.error);
+  });
+});
+</script>
+{{ end }}

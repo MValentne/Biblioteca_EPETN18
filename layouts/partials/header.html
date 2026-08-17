@@ -1,0 +1,12 @@
+<header class="py-4 mb-6 border-b border-gray-100 bg-white shadow-sm sticky top-0 z-30">
+  <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+    <a href="{{ "" | relURL }}" class="flex items-center space-x-2 text-xl font-bold text-blue-700 hover:text-blue-900 transition">
+      <span>📚</span>
+      <span>{{ .Site.Title }}</span>
+    </a>
+    <nav class="flex items-center space-x-4 text-sm font-medium">
+      <a href="{{ "generos/" | relURL }}" class="text-gray-700 hover:text-blue-600 transition">Géneros / Colecciones</a>
+      <a href="{{ "libros/" | relURL }}" class="text-gray-700 hover:text-blue-600 transition">Todos los Libros</a>
+    </nav>
+  </div>
+</header>
