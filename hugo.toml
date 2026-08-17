@@ -11,18 +11,104 @@ timeout = '120s'
     name = "Biblioteca EPET N° 18"
     email = ""
 
-    # LISTA DE ISBNs DE LA BIBLIOTECA
-    # Solo agrega aquí los códigos ISBN de los libros que quieras incorporar.
-    # El sistema consultará Google Books, obtendrá los géneros/categorías
-    # automáticamente y los organizará en bloques en la página principal.
-    isbns = [
-        "9789500700764", # El túnel - Ernesto Sabato (Fiction / Classics)
-        "9788437604947", # Cien años de soledad - Gabriel García Márquez (Fiction / Magical Realism)
-        "9780131103627", # The C Programming Language - Kernighan & Ritchie (Computers / Programming)
-        "9780140328721", # Fantastic Mr Fox - Roald Dahl (Juvenile Fiction)
-        "9788497592208", # 1984 - George Orwell (Fiction / Science Fiction)
-        "9788420685625", # El arte de la guerra - Sun Tzu (History / Philosophy)
-        "9786073837873", # Clean Code - Robert C. Martin (Computers)
-        "9788445071403", # El Señor de los Anillos - J.R.R. Tolkien (Fiction / Fantasy)
-        "9789871138012"  # Martín Fierro - José Hernández (Poetry / Classics)
-    ]
+    # CATÁLOGO DE LIBROS DE LA BIBLIOTECA
+    # Puedes agregar libros especificando su ISBN, título, autores, categoría, sinopsis y portada.
+    # El sistema organizará todo dinámicamente en bloques por categoría en la página principal.
+    [[params.libros]]
+    isbn = "9789500700764"
+    title = "El Túnel"
+    authors = ["Ernesto Sabato"]
+    category = "Ficción / Novela"
+    publisher = "Editorial Sudamericana"
+    year = "1948"
+    pages = 160
+    description = "Novela de estructura casi policial sobre el pintor Juan Pablo Castel y su obsesión con María Iribarne."
+    cover = "https://covers.openlibrary.org/b/isbn/9789500700764-L.jpg"
+
+    [[params.libros]]
+    isbn = "9788437604947"
+    title = "Cien Años de Soledad"
+    authors = ["Gabriel García Márquez"]
+    category = "Ficción / Novela"
+    publisher = "Cátedra"
+    year = "1967"
+    pages = 496
+    description = "La historia de la familia Buendía a lo largo de siete generaciones en el mítico pueblo de Macondo."
+    cover = "https://covers.openlibrary.org/b/isbn/9788437604947-L.jpg"
+
+    [[params.libros]]
+    isbn = "9780131103627"
+    title = "The C Programming Language (2da Ed.)"
+    authors = ["Brian W. Kernighan", "Dennis M. Ritchie"]
+    category = "Informática & Tecnología"
+    publisher = "Prentice Hall"
+    year = "1988"
+    pages = 272
+    description = "El libro canónico escrito por los diseñadores originales del lenguaje de programación C."
+    cover = "https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg"
+
+    [[params.libros]]
+    isbn = "9786073837873"
+    title = "Código Limpio (Clean Code)"
+    authors = ["Robert C. Martin"]
+    category = "Informática & Tecnología"
+    publisher = "Anaya Multimedia"
+    year = "2012"
+    pages = 464
+    description = "Manual de estilo para el desarrollo ágil de software y buenas prácticas de ingeniería."
+    cover = "https://covers.openlibrary.org/b/isbn/9786073837873-L.jpg"
+
+    [[params.libros]]
+    isbn = "9788497592208"
+    title = "1984"
+    authors = ["George Orwell"]
+    category = "Ciencia Ficción & Distopía"
+    publisher = "Debolsillo"
+    year = "1949"
+    pages = 352
+    description = "Una inquietante distopía sobre el totalitarismo, el Gran Hermano y el control social absoluto."
+    cover = "https://covers.openlibrary.org/b/isbn/9788497592208-L.jpg"
+
+    [[params.libros]]
+    isbn = "9788445071403"
+    title = "El Señor de los Anillos: La Comunidad del Anillo"
+    authors = ["J.R.R. Tolkien"]
+    category = "Fantasía & Aventuras"
+    publisher = "Minotauro"
+    year = "1954"
+    pages = 576
+    description = "El inicio del épico viaje de Frodo Bolsón hacia las tierras de Mordor para destruir el Anillo Único."
+    cover = "https://covers.openlibrary.org/b/isbn/9788445071403-L.jpg"
+
+    [[params.libros]]
+    isbn = "9780140328721"
+    title = "Fantastic Mr Fox"
+    authors = ["Roald Dahl"]
+    category = "Literatura Juvenil / Infantil"
+    publisher = "Puffin Books"
+    year = "1970"
+    pages = 96
+    description = "Las divertidas y astutas aventuras del Superzorro para alimentar a su familia burlando a los granjeros."
+    cover = "https://covers.openlibrary.org/b/isbn/9780140328721-L.jpg"
+
+    [[params.libros]]
+    isbn = "9788420685625"
+    title = "El Arte de la Guerra"
+    authors = ["Sun Tzu"]
+    category = "Filosofía & Estrategia"
+    publisher = "Alianza Editorial"
+    year = "2014"
+    pages = 160
+    description = "El tratado milenario más influyente sobre estrategia, liderazgo y resolución de conflictos."
+    cover = "https://covers.openlibrary.org/b/isbn/9788420685625-L.jpg"
+
+    [[params.libros]]
+    isbn = "9789871138012"
+    title = "El Gaucho Martín Fierro"
+    authors = ["José Hernández"]
+    category = "Poesía & Clásicos Argentinos"
+    publisher = "Gradifco"
+    year = "1872"
+    pages = 192
+    description = "Poema narrativo épico considerado la obra cumbre de la literatura gauchesca argentina."
+    cover = "https://covers.openlibrary.org/b/isbn/9789871138012-L.jpg"
