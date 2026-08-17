@@ -162,7 +162,8 @@ function openBookModal(isbn) {
   document.getElementById('modal-desc').textContent = book.description || 'Sin sinopsis disponible.';
   
   const linkEl = document.getElementById('modal-link');
-  linkEl.href = `https://books.google.com/books?vid=ISBN${encodeURIComponent(book.isbn)}`;
+  const queryStr = `${book.title} ${authorsText} ISBN ${book.isbn}`;
+  linkEl.href = `https://www.google.com/search?tbm=bks&q=${encodeURIComponent(queryStr)}`;
 
   document.getElementById('book-modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
