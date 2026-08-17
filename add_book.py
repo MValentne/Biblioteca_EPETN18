@@ -95,6 +95,34 @@ def complete_from_openlibrary(book):
         print(f"  [Aviso fuente alternativa]: {e}")
     return book
 
+def fetch_openlibrary_info(isbn):
+    """Obtiene una edición concreta cuando Google Books está limitado por cuota."""
+    url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&jscmd=data&format=json"
+    req = urllib.request.Request(url, headers={'User-Agent': 'Biblioteca-EPETN18/1.0'})
+    with urllib.request.urlopen(req, timeout=6) as response:
+        info = json.loads(response.read().decode('utf-8')).get(f"ISBN:{isbn}", {})
+    if not info:
+        return None
+
+    authors = [a.get('name', '').strip() for a in info.get('authors', []) if a.get('name')]
+    publishers = [p.get('name', '').strip() for p in info.get('publishers', []) if p.get('name')]
+    subjects = [s.get('name', '') for s in info.get('subjects', [])]
+    description = info.get('notes') or info.get('description') or ""
+    if isinstance(description, dict):
+        description = description.get('value', '')
+    return {
+        "isbn": isbn,
+        "title": info.get('title') or f"Libro {isbn}",
+        "authors": authors or ["Autor desconocido"],
+        "category": normalize_category(subjects[0] if subjects else ""),
+        "publisher": publishers[0] if publishers else "",
+        "year": str(info.get('publish_date', ''))[-4:],
+        "pages": info.get('number_of_pages') or 0,
+        "description": description,
+        "cover_remote": (info.get('cover', {}).get('medium') or
+                          f"https://covers.openlibrary.org/b/isbn/{isbn}-L.jpg")
+    }
+
 def fetch_book_info(isbn, custom_query=None):
     clean_isbn = clean_isbn_str(isbn)
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
@@ -112,6 +140,14 @@ def fetch_book_info(isbn, custom_query=None):
                 return complete_from_openlibrary(merge_volume_info(data['items'], clean_isbn))
     except Exception as e:
         print(f"  [Aviso API]: {e}")
+
+    # Open Library suele seguir disponible aunque Google Books haya agotado la cuota.
+    try:
+        fallback = fetch_openlibrary_info(clean_isbn)
+        if fallback:
+            return fallback
+    except Exception as e:
+        print(f"  [Aviso Open Library]: {e}")
 
     # Fallback por scraping web de Google Books si la API tiene cuota agotada
     try:
@@ -171,19 +207,10 @@ def download_cover(isbn, remote_url):
 
     return remote_url
 
-def save_to_hugo(book):
+def book_block(book, pdf=""):
     authors_json = json.dumps(book['authors'], ensure_ascii=False)
-    desc_escaped = book['description'].replace('"', '\\"').replace('\n', ' ')
-    
-    # Verificar si el ISBN ya existe en hugo.toml
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    if f'isbn = "{book["isbn"]}"' in content:
-        print(f"El libro con ISBN {book['isbn']} ya se encuentra registrado en {CONFIG_PATH}")
-        return
-
-    block = f"""
+    desc_escaped = str(book['description'] or '').replace('"', '\\"').replace('\n', ' ')
+    return f"""
     [[params.libros]]
     isbn = "{book['isbn']}"
     title = "{book['title']}"
@@ -191,25 +218,56 @@ def save_to_hugo(book):
     category = "{book['category']}"
     publisher = "{book['publisher']}"
     year = "{book['year']}"
-    pages = {book['pages']}
+    pages = {book['pages'] or 0}
     description = "{desc_escaped}"
     cover = "{book['cover']}"
-    pdf = ""
+    pdf = "{pdf}"
 """
+
+def save_to_hugo(book, refresh=False):
+    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    pattern = re.compile(rf'(?ms)^\s*\[\[params\.libros\]\].*?^\s*isbn\s*=\s*"{re.escape(book["isbn"])}".*?(?=^\s*\[\[params\.libros\]\]|\Z)')
+    existing = pattern.search(content)
+    if existing and refresh:
+        pdf_match = re.search(r'(?m)^\s*pdf\s*=\s*"(.*)"\s*$', existing.group(0))
+        pdf = pdf_match.group(1) if pdf_match else ""
+        content = content[:existing.start()] + book_block(book, pdf) + content[existing.end():]
+        with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Metadatos del ISBN {book['isbn']} actualizados en {CONFIG_PATH}")
+        return
+
+    if existing:
+        print(f"El libro con ISBN {book['isbn']} ya se encuentra registrado en {CONFIG_PATH}")
+        return
+
     with open(CONFIG_PATH, 'a', encoding='utf-8') as f:
-        f.write(block)
+        f.write(book_block(book))
     print(f"Libro '{book['title']}' registrado con éxito en {CONFIG_PATH}")
 
 def main():
-    if len(sys.argv) < 2:
+    refresh = len(sys.argv) >= 2 and sys.argv[1] == '--refresh'
+    isbn_arg = sys.argv[2] if refresh and len(sys.argv) >= 3 else (sys.argv[1] if len(sys.argv) >= 2 else None)
+    query_index = 3 if refresh else 2
+    if not isbn_arg:
         print("Uso: ./add_book.py <ISBN>")
+        print("     ./add_book.py --refresh <ISBN> [\"Título del libro\"]")
         print("Ejemplo: ./add_book.py 9789500700764")
         sys.exit(1)
 
-    isbn = sys.argv[1]
-    query = sys.argv[2] if len(sys.argv) > 2 else None
+    isbn = isbn_arg
+    query = sys.argv[query_index] if len(sys.argv) > query_index else None
+
+    # No consultar APIs ni reemplazar datos al intentar agregar un ISBN existente.
+    clean_isbn = clean_isbn_str(isbn)
+    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+        if not refresh and f'isbn = "{clean_isbn}"' in f.read():
+            print(f"El libro con ISBN {clean_isbn} ya se encuentra registrado en {CONFIG_PATH}")
+            return
     
-    print(f"Consultando metadatos para ISBN: {isbn}...")
+    print(f"Consultando metadatos para ISBN: {clean_isbn}...")
     book = fetch_book_info(isbn, query)
     
     print(f"Título: {book['title']}")
@@ -223,7 +281,7 @@ def main():
     cover_path = download_cover(book['isbn'], book['cover_remote'])
     book['cover'] = cover_path
     
-    save_to_hugo(book)
+    save_to_hugo(book, refresh=refresh)
 
 if __name__ == '__main__':
     main()
