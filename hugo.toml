@@ -120,3 +120,15 @@ timeout = '120s'
     description = "Obra cumbre de la poesía gauchesca y el patrimonio literario tradicional argentino."
     cover = "images/covers/9789871138012.jpg"
     pdf = ""
+
+    [[params.libros]]
+    isbn = "0471091383"
+    title = "Combinatorial Theory"
+    authors = ["Biblioteca EPET N° 18"]
+    category = "Otros"
+    publisher = ""
+    year = ""
+    pages = 0
+    description = "Ejemplar catalogado en la Biblioteca EPET N° 18."
+    cover = "images/covers/0471091383.jpg"
+    pdf = ""
