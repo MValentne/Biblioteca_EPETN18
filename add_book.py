@@ -7,6 +7,7 @@ Uso:
 """
 
 import urllib.request
+import urllib.parse
 import json
 import re
 import sys
@@ -15,22 +16,32 @@ import os
 CONFIG_PATH = "hugo.toml"
 COVERS_DIR = "static/images/covers"
 
-# Mapeo de categorías en inglés a español
-CATEGORY_MAP = {
-    "fiction": "Ficción / Novela",
-    "juvenile fiction": "Literatura Juvenil / Infantil",
-    "computers": "Informática & Tecnología",
-    "science": "Ciencias Naturales & Física",
-    "history": "Historia & Crónicas",
-    "philosophy": "Filosofía & Pensamiento",
-    "poetry": "Poesía & Clásicos",
-    "education": "Educación & Pedagogía",
-    "technology & engineering": "Tecnología & Ingeniería",
-    "art": "Arte & Diseño",
-    "drama": "Teatro & Dramaturgia",
-    "comics & graphic novels": "Cómics & Novela Gráfica",
-    "social science": "Ciencias Sociales"
-}
+# Taxonomía única del catálogo. Google Books devuelve categorías libres y, a
+# menudo, jerárquicas (por ejemplo: "Juvenile Fiction / Fantasy & Magic").
+# Todos esos valores se reducen a uno de estos encabezados estables.
+CATEGORY_RULES = (
+    ("Literatura Infantil & Juvenil", ("juvenile", "children", "infantil", "juvenil", "young adult")),
+    ("Cómics & Novela Gráfica", ("comics", "graphic novel", "manga")),
+    ("Ciencia Ficción & Fantasía", ("science fiction", "fantasy", "ciencia ficción", "fantasía", "dystopian")),
+    ("Poesía, Teatro & Clásicos", ("poetry", "poesía", "drama", "teatro", "classics", "clásicos")),
+    ("Literatura & Ficción", ("fiction", "ficción", "literature", "literatura", "novel", "novela")),
+    ("Informática & Tecnología", ("computers", "computer", "software", "programming", "informática", "technology")),
+    ("Tecnología & Ingeniería", ("engineering", "ingeniería", "technology")),
+    ("Ciencias Naturales & Física", ("science", "ciencia", "physics", "física", "biology", "biología")),
+    ("Ciencias Sociales", ("social science", "sociology", "sociología", "politics", "política", "economics", "economía")),
+    ("Historia & Crónicas", ("history", "historia", "biography", "biografía")),
+    ("Filosofía, Ensayo & Pensamiento", ("philosophy", "filosofía", "essay", "ensayo", "religion", "religión")),
+    ("Arte & Diseño", ("art", "arte", "design", "diseño", "music", "música")),
+    ("Educación & Pedagogía", ("education", "educación", "teaching", "pedagogy", "pedagogía")),
+)
+
+def normalize_category(raw_category):
+    """Convierte cualquier categoría de Google Books al estándar del catálogo."""
+    value = re.sub(r"\s+", " ", str(raw_category or "")).strip().lower()
+    for canonical, keywords in CATEGORY_RULES:
+        if any(keyword in value for keyword in keywords):
+            return canonical
+    return "Otros"
 
 def clean_isbn_str(raw):
     return re.sub(r'[^0-9X]', '', str(raw).strip().upper())
@@ -51,8 +62,8 @@ def fetch_book_info(isbn, custom_query=None):
             if data.get('items'):
                 item = data['items'][0]
                 v = item.get('volumeInfo', {})
-                raw_cat = (v.get('categories') or ['General'])[0].split('/')[0].strip()
-                cat_friendly = CATEGORY_MAP.get(raw_cat.lower(), raw_cat)
+                raw_cat = (v.get('categories') or [''])[0]
+                cat_friendly = normalize_category(raw_cat)
                 
                 # Obtener enlace a la mejor portada
                 img_links = v.get('imageLinks', {})
@@ -89,7 +100,7 @@ def fetch_book_info(isbn, custom_query=None):
                 "isbn": clean_isbn,
                 "title": title,
                 "authors": ["Biblioteca EPET N° 18"],
-                "category": "General",
+                "category": "Otros",
                 "publisher": "",
                 "year": "",
                 "pages": 0,
@@ -103,7 +114,7 @@ def fetch_book_info(isbn, custom_query=None):
         "isbn": clean_isbn,
         "title": f"Libro {clean_isbn}",
         "authors": ["Biblioteca EPET N° 18"],
-        "category": "General",
+        "category": "Otros",
         "publisher": "",
         "year": "",
         "pages": 0,

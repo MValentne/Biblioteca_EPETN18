@@ -149,7 +149,7 @@ function openBookModal(index) {
     document.getElementById('modal-cover').classList.add('hidden');
   }
 
-  document.getElementById('modal-category').textContent = (info.categories && info.categories[0]) || 'General';
+  document.getElementById('modal-category').textContent = (info.categories && info.categories[0]) || 'Otros';
   document.getElementById('modal-publisher').textContent = info.publisher || 'No especificada';
   document.getElementById('modal-date').textContent = info.publishedDate ? info.publishedDate.substring(0, 4) : 'No especificado';
   document.getElementById('modal-pages').textContent = info.pageCount ? `${info.pageCount} págs.` : 'No especificado';

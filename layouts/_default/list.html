@@ -215,7 +215,7 @@ function openBookModal(isbn) {
     coverEl.classList.add('hidden');
   }
 
-  document.getElementById('modal-category').textContent = book.category || 'General';
+  document.getElementById('modal-category').textContent = book.category || 'Otros';
   document.getElementById('modal-publisher').textContent = book.publisher || 'No especificada';
   document.getElementById('modal-date').textContent = book.year || 'No especificado';
   document.getElementById('modal-pages').textContent = book.pages ? `${book.pages} págs.` : 'No especificado';
