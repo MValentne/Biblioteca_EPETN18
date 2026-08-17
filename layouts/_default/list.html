@@ -162,8 +162,9 @@ function openBookModal(isbn) {
   document.getElementById('modal-desc').textContent = book.description || 'Sin sinopsis disponible.';
   
   const linkEl = document.getElementById('modal-link');
-  const queryStr = `${book.title} ${authorsText} ISBN ${book.isbn}`;
-  linkEl.href = `https://www.google.com/search?tbm=bks&q=${encodeURIComponent(queryStr)}`;
+  const mainAuthor = Array.isArray(book.authors) ? book.authors[0] : (book.authors || '');
+  const cleanQuery = `${book.title} ${mainAuthor}`.trim();
+  linkEl.href = `https://www.google.com/search?tbm=bks&q=${encodeURIComponent(cleanQuery)}`;
 
   document.getElementById('book-modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
