@@ -167,4 +167,4 @@ timeout = '120s'
     pages = 464
     description = "Source title: El informe pelícano (Spanish Edition)"
     cover = "https://covers.openlibrary.org/b/id/13496210-M.jpg"
-    pdf = ""
+    pdf = "https://books.google.com.ar/books/about/El_informe_Pel%C3%ADcano.html?id=u5iGNwAACAAJ&redir_esc=y"
