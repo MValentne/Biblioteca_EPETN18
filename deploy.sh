@@ -1,33 +1,33 @@
 #!/usr/bin/env bash
 
-# Terminar inmediatamente si un comando falla
-set -e
+set -Eeuo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT_DIR"
 
 printf "\033[0;32mDesplegando actualizaciones a GitHub Pages...\033[0m\n"
 
-# Limpiar directorio public previo si existe
-rm -rf public
-
 # Construir el sitio con Hugo
-hugo --minify
+hugo --gc --minify --cleanDestinationDir
 
-# Ir al directorio generado
-cd public
+# GitHub Pages no debe procesar el contenido con Jekyll.
+touch public/.nojekyll
 
-# Inicializar un nuevo repo git para la rama gh-pages o sobreescribir
-git init -b gh-pages
-git add -A
+# Inicializar un repositorio independiente para la rama gh-pages.
+git -C public init
+git -C public checkout -B gh-pages
+git -C public add --all
 
 # Commit de los cambios
 msg="Despliegue del sitio $(date '+%Y-%m-%d %H:%M:%S')"
 if [ -n "$*" ]; then
     msg="$*"
 fi
-git commit -m "$msg"
+git -C public commit --allow-empty -m "$msg"
 
 # Empujar a la rama gh-pages del repositorio remoto
-git remote add origin git@github.com:MValentne/Biblioteca_EPETN18.git
-git push -f origin gh-pages
+git -C public remote remove origin 2>/dev/null || true
+git -C public remote add origin git@github.com:MValentne/Biblioteca_EPETN18.git
+git -C public push --force origin gh-pages
 
-cd ..
 printf "\033[0;32m¡Despliegue completado con éxito!\033[0m\n"
