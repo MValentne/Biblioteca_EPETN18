@@ -12,7 +12,7 @@ timeout = '120s'
     email = ""
 
     # CATÁLOGO DE LIBROS DE LA BIBLIOTECA
-    # Cada libro cuenta con su portada exacta alojada localmente en static/images/covers/
+    # Puedes registrar nuevos libros ejecutando: ./add_book.py <ISBN>
     [[params.libros]]
     isbn = "9789500700764"
     title = "El Túnel"
@@ -21,7 +21,7 @@ timeout = '120s'
     publisher = "Editorial Sudamericana"
     year = "1948"
     pages = 160
-    description = "Novela de estructura casi policial sobre el pintor Juan Pablo Castel y su obsesión con María Iribarne."
+    description = "Novela de estructura psicológica y existencialista sobre el pintor Juan Pablo Castel y su obsesión con María Iribarne."
     cover = "images/covers/9789500700764.jpg"
 
     [[params.libros]]
@@ -37,13 +37,13 @@ timeout = '120s'
 
     [[params.libros]]
     isbn = "9780131103627"
-    title = "The C Programming Language"
+    title = "The C Programming Language (2nd Edition)"
     authors = ["Brian W. Kernighan", "Dennis M. Ritchie"]
     category = "Informática & Tecnología"
     publisher = "Prentice Hall"
     year = "1988"
     pages = 272
-    description = "El libro canónico escrito por los diseñadores originales del lenguaje de programación C."
+    description = "El libro canónico de referencia mundial escrito por los diseñadores originales del lenguaje de programación C."
     cover = "images/covers/9780131103627.png"
 
     [[params.libros]]
@@ -54,7 +54,7 @@ timeout = '120s'
     publisher = "Anaya Multimedia"
     year = "2012"
     pages = 464
-    description = "Manual de estilo para el desarrollo ágil de software y buenas prácticas de ingeniería."
+    description = "Manual de estilo y buenas prácticas para la creación, refactorización y mantenimiento de software profesional."
     cover = "images/covers/9786073837873.jpg"
 
     [[params.libros]]
@@ -65,7 +65,7 @@ timeout = '120s'
     publisher = "Debolsillo"
     year = "1949"
     pages = 352
-    description = "Una inquietante distopía sobre el totalitarismo, el Gran Hermano y el control social absoluto."
+    description = "Una de las obras maestras de la literatura distópica del siglo XX sobre la vigilancia estatal totalitaria y el Gran Hermano."
     cover = "images/covers/9788497592208.jpg"
 
     [[params.libros]]
@@ -76,18 +76,18 @@ timeout = '120s'
     publisher = "Minotauro"
     year = "1954"
     pages = 576
-    description = "El inicio del épico viaje de Frodo Bolsón hacia las tierras de Mordor para destruir el Anillo Único."
+    description = "El inicio del legendario viaje de Frodo Bolsón y sus compañeros a través de la Tierra Media para destruir el Anillo de Poder."
     cover = "images/covers/9788445071403.png"
 
     [[params.libros]]
     isbn = "9780140328721"
-    title = "Fantastic Mr Fox"
+    title = "Fantastic Mr. Fox"
     authors = ["Roald Dahl"]
     category = "Literatura Juvenil / Infantil"
     publisher = "Puffin Books"
     year = "1970"
     pages = 96
-    description = "Las divertidas y astutas aventuras del Superzorro para alimentar a su familia burlando a los granjeros."
+    description = "Las divertidas y astutas aventuras de un valiente zorro para alimentar a su familia burlando a tres granjeros despiadados."
     cover = "images/covers/9780140328721.jpg"
 
     [[params.libros]]
@@ -98,7 +98,7 @@ timeout = '120s'
     publisher = "Alianza Editorial"
     year = "2014"
     pages = 160
-    description = "El tratado milenario más influyente sobre estrategia, liderazgo y resolución de conflictos."
+    description = "El tratado militar y filosófico más influyente de la historia sobre resolución de conflictos y tácticas de liderazgo."
     cover = "images/covers/9788420685625.jpg"
 
     [[params.libros]]
@@ -109,5 +109,5 @@ timeout = '120s'
     publisher = "Gradifco"
     year = "1872"
     pages = 192
-    description = "Poema narrativo épico considerado la obra cumbre de la literatura gauchesca argentina."
+    description = "Obra cumbre de la poesía gauchesca y el patrimonio literario tradicional argentino."
     cover = "images/covers/9789871138012.jpg"
