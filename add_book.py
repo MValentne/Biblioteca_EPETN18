@@ -126,7 +126,7 @@ def download_cover(isbn, remote_url):
             if len(data) > 500:
                 with open(local_path, 'wb') as f:
                     f.write(data)
-                print(f"  📥 Portada descargada ({len(data)} bytes) en {local_path}")
+                print(f"  Portada guardada ({len(data)} bytes) en {local_path}")
                 return f"images/covers/{isbn}.{ext}"
     except Exception as e:
         print(f"  [Aviso descarga portada]: {e}")
@@ -142,7 +142,7 @@ def save_to_hugo(book):
         content = f.read()
 
     if f'isbn = "{book["isbn"]}"' in content:
-        print(f"ℹ️ El libro con ISBN {book['isbn']} ya se encuentra registrado en {CONFIG_PATH}")
+        print(f"El libro con ISBN {book['isbn']} ya se encuentra registrado en {CONFIG_PATH}")
         return
 
     block = f"""
@@ -159,7 +159,7 @@ def save_to_hugo(book):
 """
     with open(CONFIG_PATH, 'a', encoding='utf-8') as f:
         f.write(block)
-    print(f"✅ Libro '{book['title']}' registrado con éxito en {CONFIG_PATH}")
+    print(f"Libro '{book['title']}' registrado con éxito en {CONFIG_PATH}")
 
 def main():
     if len(sys.argv) < 2:
@@ -170,12 +170,12 @@ def main():
     isbn = sys.argv[1]
     query = sys.argv[2] if len(sys.argv) > 2 else None
     
-    print(f"🔍 Consultando metadatos para ISBN: {isbn}...")
+    print(f"Consultando metadatos para ISBN: {isbn}...")
     book = fetch_book_info(isbn, query)
     
-    print(f"📖 Título: {book['title']}")
-    print(f"✍️  Autores: {', '.join(book['authors'])}")
-    print(f"📂 Categoría: {book['category']}")
+    print(f"Título: {book['title']}")
+    print(f"Autores: {', '.join(book['authors'])}")
+    print(f"Categoría: {book['category']}")
     
     cover_path = download_cover(book['isbn'], book['cover_remote'])
     book['cover'] = cover_path

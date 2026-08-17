@@ -1,84 +1,101 @@
 {{ define "main" }}
-<main class="max-w-7xl mx-auto px-4 py-8">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <div class="mb-6">
-    {{ partial "breadcrumb.html" . }}
-    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight mt-2">{{ .Title }}</h1>
+    <a href="{{ "" | relURL }}" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 transition mb-3">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      <span>Volver al catálogo</span>
+    </a>
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{{ .Title }}</h1>
     {{ with .Params.description }}
-      <p class="text-gray-600 text-base mt-1">{{ . }}</p>
+      <p class="text-slate-600 text-sm mt-1">{{ . }}</p>
     {{ end }}
   </div>
 
-  <!-- Contenido Markdown de la página si existe -->
   {{ if .Content }}
-    <div class="prose max-w-none mb-8">
+    <div class="prose max-w-none mb-8 text-slate-700">
       {{ .Content }}
     </div>
   {{ end }}
 
-  <!-- Contenedor dinámico de libros si la página define google_genre o lista de isbns -->
   {{ if or .Params.google_genre .Params.isbns .Params.books }}
-  <div class="border-t border-gray-200 pt-6 mt-6">
+  <div class="border-t border-slate-200 pt-6 mt-6">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-bold text-gray-800 flex items-center space-x-2">
-        <span>📖</span>
-        <span>Libros en este Género</span>
+      <h2 class="text-lg font-bold text-slate-800">
+        Títulos en esta sección
       </h2>
-      <span id="book-count-badge" class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full">Cargando catálogo...</span>
+      <span id="book-count-badge" class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200">
+        Cargando libros...
+      </span>
     </div>
 
-    <!-- Grid de libros estilo Galería -->
-    <div id="books-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+    <div id="books-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5"
          data-genre="{{ .Params.google_genre }}"
          {{ if .Params.isbns }}data-isbns="{{ delimit .Params.isbns "," }}"{{ end }}>
     </div>
 
-    <div id="books-loading" class="flex flex-col items-center justify-center py-16 text-gray-400">
-      <svg class="animate-spin h-8 w-8 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <div id="books-loading" class="flex flex-col items-center justify-center py-16 text-slate-400">
+      <svg class="animate-spin h-6 w-6 text-slate-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
       </svg>
-      <p class="text-sm">Consultando Google Books API...</p>
+      <p class="text-xs">Cargando información bibliográfica...</p>
     </div>
   </div>
 
-  <!-- Modal Interactivo de Detalle del Libro -->
-  <div id="book-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
-      <button onclick="closeBookModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <!-- Modal de Detalle del Libro -->
+  <div id="book-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeBookModal()">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-xl relative animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto border border-slate-100" onclick="event.stopPropagation()">
+      <button onclick="closeBookModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg p-2 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
 
       <div class="flex flex-col sm:flex-row gap-6">
-        <div class="flex-shrink-0 flex justify-center">
-          <img id="modal-cover" class="w-40 h-60 object-cover rounded-lg shadow-md border" src="" alt="Portada">
+        <div class="flex-shrink-0 flex justify-center sm:justify-start">
+          <img id="modal-cover" class="w-36 sm:w-44 h-52 sm:h-64 object-cover rounded-lg shadow-sm border border-slate-200 bg-slate-50" src="" alt="Portada">
         </div>
         <div class="flex-1 flex flex-col justify-between">
           <div>
-            <span id="modal-category" class="inline-block bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase tracking-wide mb-2"></span>
-            <h2 id="modal-title" class="text-2xl font-bold text-gray-900 leading-tight"></h2>
-            <p id="modal-authors" class="text-sm font-semibold text-blue-700 mt-1"></p>
+            <span id="modal-category" class="inline-block bg-slate-100 text-slate-700 border border-slate-200 text-xs px-2.5 py-0.5 rounded-full font-medium mb-2.5"></span>
+            <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-slate-900 leading-snug"></h2>
+            <p id="modal-authors" class="text-sm font-medium text-slate-600 mt-1"></p>
 
-            <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-500 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
-              <span id="modal-publisher"></span>
-              <span id="modal-date"></span>
-              <span id="modal-pages"></span>
-              <span id="modal-isbn"></span>
-            </div>
+            <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+              <div>
+                <dt class="text-slate-400 font-medium">Editorial</dt>
+                <dd id="modal-publisher" class="text-slate-800 font-semibold truncate">—</dd>
+              </div>
+              <div>
+                <dt class="text-slate-400 font-medium">Año de edición</dt>
+                <dd id="modal-date" class="text-slate-800 font-semibold truncate">—</dd>
+              </div>
+              <div>
+                <dt class="text-slate-400 font-medium">Páginas</dt>
+                <dd id="modal-pages" class="text-slate-800 font-semibold truncate">—</dd>
+              </div>
+              <div>
+                <dt class="text-slate-400 font-medium">ISBN</dt>
+                <dd id="modal-isbn" class="text-slate-800 font-semibold font-mono truncate">—</dd>
+              </div>
+            </dl>
 
             <div class="mt-4">
-              <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Sinopsis</h4>
-              <p id="modal-desc" class="text-sm text-gray-600 mt-1 max-h-48 overflow-y-auto leading-relaxed"></p>
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Sinopsis</h4>
+              <p id="modal-desc" class="text-xs sm:text-sm text-slate-600 mt-1.5 max-h-40 overflow-y-auto leading-relaxed"></p>
             </div>
           </div>
 
-          <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition">
-              <span>Abrir en Google Books</span>
-              <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-xs transition">
+              <span>Consultar en Google Libros</span>
+              <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
             </a>
-            <button onclick="closeBookModal()" class="text-xs text-gray-500 hover:text-gray-800 font-medium">Cerrar</button>
+            <button onclick="closeBookModal()" class="px-3 py-2 text-xs text-slate-500 hover:text-slate-800 font-medium transition">Cerrar</button>
           </div>
         </div>
       </div>
@@ -86,7 +103,6 @@
   </div>
   {{ end }}
 
-  <!-- Soporte nativo de galería de imágenes y videos de Berenice si existen recursos -->
   {{ $resources := .Resources.Match "**" }}
   {{ if gt (len $resources) 0 }}
     <div id="lightgallery" class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 mt-8">
@@ -122,7 +138,7 @@ function openBookModal(index) {
   const info = book.volumeInfo || {};
 
   document.getElementById('modal-title').textContent = info.title || 'Sin título';
-  document.getElementById('modal-authors').textContent = info.authors ? `Autor(es): ${info.authors.join(', ')}` : 'Autor desconocido';
+  document.getElementById('modal-authors').textContent = info.authors ? info.authors.join(', ') : 'Autor desconocido';
   
   let thumb = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
   if (thumb) {
@@ -133,15 +149,15 @@ function openBookModal(index) {
     document.getElementById('modal-cover').classList.add('hidden');
   }
 
-  document.getElementById('modal-category').textContent = (info.categories && info.categories[0]) || 'Libro';
-  document.getElementById('modal-publisher').textContent = info.publisher ? `Editorial: ${info.publisher}` : '';
-  document.getElementById('modal-date').textContent = info.publishedDate ? `Año: ${info.publishedDate.substring(0, 4)}` : '';
-  document.getElementById('modal-pages').textContent = info.pageCount ? `${info.pageCount} páginas` : '';
+  document.getElementById('modal-category').textContent = (info.categories && info.categories[0]) || 'General';
+  document.getElementById('modal-publisher').textContent = info.publisher || 'No especificada';
+  document.getElementById('modal-date').textContent = info.publishedDate ? info.publishedDate.substring(0, 4) : 'No especificado';
+  document.getElementById('modal-pages').textContent = info.pageCount ? `${info.pageCount} págs.` : 'No especificado';
   
-  let isbn = '';
+  let isbn = '—';
   if (info.industryIdentifiers) {
     const obj = info.industryIdentifiers.find(i => i.type.includes('13')) || info.industryIdentifiers[0];
-    if (obj) isbn = `ISBN: ${obj.identifier}`;
+    if (obj) isbn = obj.identifier;
   }
   document.getElementById('modal-isbn').textContent = isbn;
   document.getElementById('modal-desc').innerHTML = info.description || 'No hay descripción disponible para este libro.';
@@ -159,7 +175,8 @@ function openBookModal(index) {
 }
 
 function closeBookModal() {
-  document.getElementById('book-modal').classList.add('hidden');
+  const modal = document.getElementById('book-modal');
+  if (modal) modal.classList.add('hidden');
   document.body.style.overflow = 'auto';
 }
 
@@ -178,7 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let fetchUrl = '';
   if (isbns) {
-    // Si viene una lista de ISBNs fija
     const list = isbns.split(',').map(s => s.trim()).filter(Boolean);
     const promises = list.map(isbn => 
       fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}&maxResults=1`)
@@ -204,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(r => r.json())
     .then(data => {
       if (!data.items || data.items.length === 0) {
-        // Fallback sin restricción de idioma si no hay resultados en español
         return fetch(`https://www.googleapis.com/books/v1/volumes?q=subject:${encodeURIComponent(genre)}&maxResults=20`).then(r => r.json());
       }
       return data;
@@ -215,18 +230,18 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(err => {
       console.error(err);
-      loadingEl.innerHTML = '<p class="text-red-500 text-sm">Error cargando los libros de Google Books.</p>';
+      loadingEl.innerHTML = '<p class="text-red-500 text-xs">Error consultando catálogo bibliográfico.</p>';
     });
 
   function renderBooks(books) {
     loadingEl.classList.add('hidden');
     if (books.length === 0) {
-      grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-8">No se encontraron libros disponibles para este género.</p>';
+      grid.innerHTML = '<p class="col-span-full text-center text-slate-500 py-8 text-sm">No se encontraron libros disponibles en esta sección.</p>';
       badgeEl.textContent = '0 libros';
       return;
     }
 
-    badgeEl.textContent = `${books.length} libros disponibles`;
+    badgeEl.textContent = `${books.length} ${books.length === 1 ? 'libro disponible' : 'libros disponibles'}`;
 
     grid.innerHTML = books.map((item, index) => {
       const info = item.volumeInfo || {};
@@ -236,26 +251,24 @@ document.addEventListener('DOMContentLoaded', function() {
       const author = info.authors ? info.authors[0] : 'Autor desconocido';
 
       return `
-        <div class="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between border border-gray-100"
-             onclick="openBookModal(${index})">
-          <div class="w-full aspect-[2/3] bg-gray-100 overflow-hidden relative flex items-center justify-center">
+        <article class="group cursor-pointer bg-white rounded-xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-200 flex flex-col justify-between"
+             onclick="openBookModal(${index})"
+             tabindex="0"
+             role="button">
+          <div class="w-full aspect-[2/3] bg-slate-100 overflow-hidden relative flex items-center justify-center border-b border-slate-100">
             ${thumb ? `
-              <img src="${thumb}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+              <img src="${thumb}" alt="Portada de ${title}" class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300" loading="lazy">
             ` : `
-              <div class="p-4 text-center text-xs text-gray-400 font-semibold flex flex-col items-center">
-                <span class="text-3xl mb-1">📖</span>
-                <span>${title}</span>
+              <div class="p-4 text-center text-xs text-slate-400 font-medium">
+                Sin portada
               </div>
             `}
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span class="bg-white/90 text-gray-900 text-xs font-bold px-3 py-1.5 rounded-full shadow">Ver Detalle 🔍</span>
-            </div>
           </div>
           <div class="p-3">
-            <h3 class="font-bold text-gray-900 text-xs sm:text-sm line-clamp-2 leading-snug group-hover:text-blue-600 transition">${title}</h3>
-            <p class="text-[11px] text-gray-500 font-medium line-clamp-1 mt-1">${author}</p>
+            <h3 class="font-semibold text-slate-900 text-xs sm:text-sm line-clamp-2 leading-snug group-hover:text-blue-700 transition">${title}</h3>
+            <p class="text-xs text-slate-500 font-normal line-clamp-1 mt-1">${author}</p>
           </div>
-        </div>
+        </article>
       `;
     }).join('');
   }

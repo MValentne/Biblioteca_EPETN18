@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50 antialiased">
+  {{ partial "head.html" . }}
+  <body class="min-h-full flex flex-col bg-slate-50 text-slate-900 font-sans">
+    {{ partial "header.html" . }}
+
+    <div class="flex-1">
+      {{ block "main" . }}{{ end }}
+    </div>
+
+    {{ partial "footer.html" . }}
+  </body>
+</html>
