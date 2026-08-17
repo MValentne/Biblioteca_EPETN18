@@ -7,14 +7,14 @@
         <span>Catálogo por Categorías</span>
       </h1>
       <p class="text-gray-500 text-sm mt-1">
-        Explora las colecciones y libros de la Biblioteca EPET N° 18 organizados por género temático.
+        Explora los libros de la Biblioteca EPET N° 18 organizados en bloques temáticos.
       </p>
     </div>
 
     <!-- Buscador / Filtro Rápido -->
     <div class="flex items-center gap-2">
       <div class="relative">
-        <input id="search-input" type="text" placeholder="Buscar por título, autor, ISBN o categoría..." 
+        <input id="search-input" type="text" placeholder="Buscar por título, autor o ISBN..." 
                class="pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64 md:w-80 shadow-sm" />
         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -24,9 +24,56 @@
     </div>
   </div>
 
-  <!-- Contenedor Principal de Bloques por Categoría -->
+  <!-- Contenedor Principal de Bloques por Categoría (Renderizado por Hugo HTML + fallback JS) -->
   <div id="categories-container" class="space-y-10">
-    <!-- Renderizado dinámico instantáneo -->
+    {{/* Agrupamos los libros estáticamente en Hugo */}}
+    {{ $libros := .Site.Params.libros }}
+    {{ $categories := slice }}
+    {{ range $libros }}
+      {{ if not (in $categories .category) }}
+        {{ $categories = $categories | append .category }}
+      {{ end }}
+    {{ end }}
+
+    {{ range $cat := $categories }}
+      <section class="category-block bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow" data-category="{{ $cat }}">
+        <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-100">
+          <div class="flex items-center space-x-3">
+            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📂</span>
+            <div>
+              <h2 class="text-xl font-bold text-gray-900 leading-none">{{ $cat }}</h2>
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
+            Categoría
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {{ range $book := $libros }}
+            {{ if eq $book.category $cat }}
+              <div class="book-card group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between border border-gray-100"
+                   onclick="openBookModal('{{ $book.isbn }}')"
+                   data-title="{{ $book.title }}"
+                   data-authors="{{ delimit $book.authors ", " }}"
+                   data-isbn="{{ $book.isbn }}"
+                   data-category="{{ $book.category }}">
+                <div class="w-full aspect-[2/3] bg-gray-100 overflow-hidden relative flex items-center justify-center">
+                  <img src="{{ $book.cover }}" alt="{{ $book.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.src='https://covers.openlibrary.org/b/isbn/{{ $book.isbn }}-M.jpg'">
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="bg-white/90 text-gray-900 text-[11px] font-bold px-2.5 py-1 rounded-full shadow">Ver Detalle 🔍</span>
+                  </div>
+                </div>
+                <div class="p-2.5">
+                  <h3 class="font-bold text-gray-900 text-xs line-clamp-2 leading-tight group-hover:text-blue-600 transition" title="{{ $book.title }}">{{ $book.title }}</h3>
+                  <p class="text-[11px] text-gray-500 font-medium line-clamp-1 mt-1">{{ index $book.authors 0 }}</p>
+                </div>
+              </div>
+            {{ end }}
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
   </div>
 
   <!-- Modal Interactivo de Detalle del Libro -->
@@ -74,9 +121,17 @@
   </div>
 </main>
 
+<script id="library-data" type="application/json">
+{{ .Site.Params.libros | jsonify | safeJS }}
+</script>
+
 <script>
-window.LIBRARY_BOOKS = {{ .Site.Params.libros | jsonify }};
-let globalBooks = window.LIBRARY_BOOKS || [];
+let globalBooks = [];
+try {
+  globalBooks = JSON.parse(document.getElementById('library-data').textContent);
+} catch(e) {
+  console.error("Error leyendo datos de libros:", e);
+}
 
 function openBookModal(isbn) {
   const book = globalBooks.find(b => b.isbn === isbn);
@@ -117,81 +172,12 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeBookModal();
 });
 
-function renderCategories(books) {
-  const container = document.getElementById('categories-container');
-  if (!container) return;
-
-  if (books.length === 0) {
-    container.innerHTML = `
-      <div class="text-center py-16 bg-gray-50 rounded-2xl border border-gray-100">
-        <span class="text-4xl">🔍</span>
-        <p class="text-gray-700 font-semibold mt-3">No se encontraron libros.</p>
-        <p class="text-xs text-gray-400 mt-1">Intenta con otro término de búsqueda.</p>
-      </div>
-    `;
-    return;
-  }
-
-  // Agrupar libros por categoría
-  const groups = {};
-  books.forEach(book => {
-    const cat = book.category || 'General';
-    if (!groups[cat]) groups[cat] = [];
-    groups[cat].push(book);
-  });
-
-  const sortedCategories = Object.keys(groups).sort();
-
-  let html = '';
-  sortedCategories.forEach(catName => {
-    const list = groups[catName];
-    html += `
-      <section class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-100">
-          <div class="flex items-center space-x-3">
-            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📂</span>
-            <div>
-              <h2 class="text-xl font-bold text-gray-900 leading-none">${catName}</h2>
-              <span class="text-xs text-gray-400 font-medium">${list.length} ${list.length === 1 ? 'libro' : 'libros'}</span>
-            </div>
-          </div>
-          <span class="text-xs font-semibold px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
-            Categoría
-          </span>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          ${list.map(book => {
-            const authorsText = Array.isArray(book.authors) ? book.authors[0] : (book.authors || 'Autor desconocido');
-            return `
-              <div class="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between border border-gray-100"
-                   onclick="openBookModal('${book.isbn}')">
-                <div class="w-full aspect-[2/3] bg-gray-100 overflow-hidden relative flex items-center justify-center">
-                  <img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.src='https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg'">
-                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span class="bg-white/90 text-gray-900 text-[11px] font-bold px-2.5 py-1 rounded-full shadow">Ver Detalle 🔍</span>
-                  </div>
-                </div>
-                <div class="p-2.5">
-                  <h3 class="font-bold text-gray-900 text-xs line-clamp-2 leading-tight group-hover:text-blue-600 transition" title="${book.title}">${book.title}</h3>
-                  <p class="text-[11px] text-gray-500 font-medium line-clamp-1 mt-1">${authorsText}</p>
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </section>
-    `;
-  });
-
-  container.innerHTML = html;
-}
-
+// Buscador en tiempo real
 document.addEventListener('DOMContentLoaded', function() {
-  renderCategories(globalBooks);
-
   const searchInput = document.getElementById('search-input');
   const clearBtn = document.getElementById('clear-search');
+  const categoryBlocks = document.querySelectorAll('.category-block');
+  const bookCards = document.querySelectorAll('.book-card');
 
   searchInput.addEventListener('input', function(e) {
     const q = e.target.value.toLowerCase().trim();
@@ -199,25 +185,41 @@ document.addEventListener('DOMContentLoaded', function() {
     else clearBtn.classList.add('hidden');
 
     if (!q) {
-      renderCategories(globalBooks);
+      categoryBlocks.forEach(b => b.classList.remove('hidden'));
+      bookCards.forEach(c => c.classList.remove('hidden'));
       return;
     }
 
-    const filtered = globalBooks.filter(b => {
-      const title = (b.title || '').toLowerCase();
-      const authors = Array.isArray(b.authors) ? b.authors.join(' ').toLowerCase() : (b.authors || '').toLowerCase();
-      const isbn = (b.isbn || '').toLowerCase();
-      const cat = (b.category || '').toLowerCase();
-      return title.includes(q) || authors.includes(q) || isbn.includes(q) || cat.includes(q);
-    });
+    categoryBlocks.forEach(block => {
+      let hasVisibleBook = false;
+      const cards = block.querySelectorAll('.book-card');
+      cards.forEach(card => {
+        const title = (card.getAttribute('data-title') || '').toLowerCase();
+        const authors = (card.getAttribute('data-authors') || '').toLowerCase();
+        const isbn = (card.getAttribute('data-isbn') || '').toLowerCase();
+        const cat = (card.getAttribute('data-category') || '').toLowerCase();
 
-    renderCategories(filtered);
+        if (title.includes(q) || authors.includes(q) || isbn.includes(q) || cat.includes(q)) {
+          card.classList.remove('hidden');
+          hasVisibleBook = true;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (hasVisibleBook) {
+        block.classList.remove('hidden');
+      } else {
+        block.classList.add('hidden');
+      }
+    });
   });
 
   clearBtn.addEventListener('click', function() {
     searchInput.value = '';
     clearBtn.classList.add('hidden');
-    renderCategories(globalBooks);
+    categoryBlocks.forEach(b => b.classList.remove('hidden'));
+    bookCards.forEach(c => c.classList.remove('hidden'));
   });
 });
 </script>
