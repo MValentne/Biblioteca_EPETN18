@@ -156,3 +156,15 @@ timeout = '120s'
     description = ""
     cover = "images/covers/9783140464079.jpg"
     pdf = ""
+
+    [[params.libros]]
+    isbn = "9788483467657"
+    title = "El informe pelícano"
+    authors = ["John Grisham"]
+    category = "Otros"
+    publisher = "Debolsillo"
+    year = "2008"
+    pages = 464
+    description = "Source title: El informe pelícano (Spanish Edition)"
+    cover = "https://covers.openlibrary.org/b/id/13496210-M.jpg"
+    pdf = ""
