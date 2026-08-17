@@ -11,7 +11,10 @@ def get_book_metadata(isbn):
     clean_isbn = re.sub(r'[^0-9X]', '', isbn)
     headers = {'User-Agent': 'Mozilla/5.0'}
     
-    # 1. Google Books API
+    # Endpoint directo de portada de Google Books
+    google_cover = f"https://books.google.com/books/content?vid=ISBN{clean_isbn}&printsec=frontcover&img=1&zoom=1"
+
+    # Intentar con Google Books API
     try:
         url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{clean_isbn}&maxResults=1"
         req = urllib.request.Request(url, headers=headers)
@@ -19,10 +22,6 @@ def get_book_metadata(isbn):
             data = json.loads(response.read().decode())
             if data.get('items'):
                 v = data['items'][0].get('volumeInfo', {})
-                cover = ""
-                if v.get('imageLinks'):
-                    cover = v['imageLinks'].get('thumbnail') or v['imageLinks'].get('smallThumbnail') or ""
-                    cover = cover.replace("http://", "https://")
                 return {
                     "isbn": clean_isbn,
                     "title": v.get('title', f"Libro {clean_isbn}"),
@@ -32,12 +31,11 @@ def get_book_metadata(isbn):
                     "year": (v.get('publishedDate') or "")[:4],
                     "pages": v.get('pageCount', 0),
                     "description": v.get('description', ""),
-                    "cover": cover or f"https://covers.openlibrary.org/b/isbn/{clean_isbn}-L.jpg"
+                    "cover": google_cover
                 }
     except Exception:
         pass
 
-    # Fallback básico
     return {
         "isbn": clean_isbn,
         "title": f"Libro {clean_isbn}",
@@ -47,7 +45,7 @@ def get_book_metadata(isbn):
         "year": "",
         "pages": 0,
         "description": "Ejemplar disponible en la biblioteca.",
-        "cover": f"https://covers.openlibrary.org/b/isbn/{clean_isbn}-L.jpg"
+        "cover": google_cover
     }
 
 def append_to_toml(book):
