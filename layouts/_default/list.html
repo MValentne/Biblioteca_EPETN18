@@ -51,19 +51,18 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {{ range $book := $libros }}
             {{ if eq $book.category $cat }}
+              {{ $coverUrl := $book.cover | relURL }}
               <div class="book-card group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between border border-gray-100"
                    onclick="openBookModal('{{ $book.isbn }}')"
                    data-title="{{ $book.title }}"
                    data-authors="{{ delimit $book.authors ", " }}"
                    data-isbn="{{ $book.isbn }}"
                    data-category="{{ $book.category }}">
-                <div class="w-full aspect-[2/3] bg-gray-100 overflow-hidden relative flex items-center justify-center">
-                  <img src="{{ $book.cover }}" 
+                <div class="w-full aspect-[2/3] bg-slate-100 overflow-hidden relative flex items-center justify-center">
+                  <img src="{{ $coverUrl }}" 
                        alt="{{ $book.title }}" 
                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                       loading="lazy" 
-                       referrerpolicy="no-referrer"
-                       onerror="this.onerror=null; this.src='https://books.google.com/books/content?vid=ISBN{{ $book.isbn }}&printsec=frontcover&img=1&zoom=1';">
+                       loading="lazy">
                   <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span class="bg-white/90 text-gray-900 text-[11px] font-bold px-2.5 py-1 rounded-full shadow">Ver Detalle 🔍</span>
                   </div>
@@ -91,7 +90,7 @@
 
       <div class="flex flex-col sm:flex-row gap-6">
         <div class="flex-shrink-0 flex justify-center">
-          <img id="modal-cover" class="w-40 h-60 object-cover rounded-lg shadow-md border" src="" alt="Portada" referrerpolicy="no-referrer">
+          <img id="modal-cover" class="w-40 h-60 object-cover rounded-lg shadow-md border" src="" alt="Portada">
         </div>
         <div class="flex-1 flex flex-col justify-between">
           <div>
@@ -137,6 +136,8 @@ try {
   console.error("Error leyendo datos de libros:", e);
 }
 
+const BASE_URL = {{ "" | relURL }};
+
 function openBookModal(isbn) {
   const book = globalBooks.find(b => b.isbn === isbn);
   if (!book) return;
@@ -147,7 +148,7 @@ function openBookModal(isbn) {
   
   const coverEl = document.getElementById('modal-cover');
   if (book.cover) {
-    coverEl.src = book.cover;
+    coverEl.src = book.cover.startsWith('http') ? book.cover : (BASE_URL + book.cover);
     coverEl.classList.remove('hidden');
   } else {
     coverEl.classList.add('hidden');
