@@ -46,43 +46,70 @@ def normalize_category(raw_category):
 def clean_isbn_str(raw):
     return re.sub(r'[^0-9X]', '', str(raw).strip().upper())
 
+def has_value(value):
+    return value not in (None, "", [], 0)
+
+def merge_volume_info(volumes, isbn):
+    """Combina ediciones/resultados: una portada no implica metadatos completos."""
+    infos = [volume.get('volumeInfo', {}) for volume in volumes]
+    if not infos:
+        return None
+
+    def first(field, default=""):
+        return next((info.get(field) for info in infos if has_value(info.get(field))), default)
+
+    categories = next((info.get('categories') for info in infos if info.get('categories')), [])
+    image_links = next((info.get('imageLinks') for info in infos if info.get('imageLinks')), {})
+    return {
+        "isbn": isbn,
+        "title": first('title', f"Libro {isbn}"),
+        "authors": first('authors', ["Autor desconocido"]),
+        "category": normalize_category(categories[0] if categories else ""),
+        "publisher": first('publisher'),
+        "year": str(first('publishedDate'))[:4],
+        "pages": first('pageCount', 0),
+        "description": first('description'),
+        "cover_remote": (image_links.get('thumbnail') or image_links.get('smallThumbnail') or
+                          f"https://books.google.com/books/content?vid=ISBN{isbn}&printsec=frontcover&img=1&zoom=1")
+    }
+
+def complete_from_openlibrary(book):
+    """Completa campos que Google Books deja vacíos, sin reemplazar datos válidos."""
+    missing = not all((book['publisher'], book['year'], book['pages'], book['description']))
+    if not missing:
+        return book
+    try:
+        url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{book['isbn']}&jscmd=data&format=json"
+        req = urllib.request.Request(url, headers={'User-Agent': 'Biblioteca-EPETN18/1.0'})
+        with urllib.request.urlopen(req, timeout=6) as response:
+            data = json.loads(response.read().decode('utf-8'))
+        info = data.get(f"ISBN:{book['isbn']}", {})
+        publishers = info.get('publishers') or []
+        if not book['publisher'] and publishers:
+            book['publisher'] = publishers[0].get('name', '')
+        if not book['pages'] and info.get('number_of_pages'):
+            book['pages'] = info['number_of_pages']
+        if not book['year']:
+            book['year'] = str(info.get('publish_date', ''))[-4:]
+    except Exception as e:
+        print(f"  [Aviso fuente alternativa]: {e}")
+    return book
+
 def fetch_book_info(isbn, custom_query=None):
     clean_isbn = clean_isbn_str(isbn)
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
     # 1. Intentar buscar en Google Books por ISBN exacto
-    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{clean_isbn}&maxResults=1"
+    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{clean_isbn}&maxResults=10"
     if custom_query:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={urllib.parse.quote(custom_query)}&maxResults=1"
+        url = f"https://www.googleapis.com/books/v1/volumes?q={urllib.parse.quote(custom_query)}&maxResults=10"
         
     try:
         req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=6) as response:
             data = json.loads(response.read().decode('utf-8'))
             if data.get('items'):
-                item = data['items'][0]
-                v = item.get('volumeInfo', {})
-                raw_cat = (v.get('categories') or [''])[0]
-                cat_friendly = normalize_category(raw_cat)
-                
-                # Obtener enlace a la mejor portada
-                img_links = v.get('imageLinks', {})
-                cover_remote = (img_links.get('thumbnail') or 
-                                img_links.get('smallThumbnail') or 
-                                f"https://books.google.com/books/content?vid=ISBN{clean_isbn}&printsec=frontcover&img=1&zoom=1")
-                cover_remote = cover_remote.replace('http://', 'https://')
-                
-                return {
-                    "isbn": clean_isbn,
-                    "title": v.get('title', f"Libro {clean_isbn}"),
-                    "authors": v.get('authors', ["Autor desconocido"]),
-                    "category": cat_friendly,
-                    "publisher": v.get('publisher', ""),
-                    "year": (v.get('publishedDate') or "")[:4],
-                    "pages": v.get('pageCount', 0),
-                    "description": v.get('description', ""),
-                    "cover_remote": cover_remote
-                }
+                return complete_from_openlibrary(merge_volume_info(data['items'], clean_isbn))
     except Exception as e:
         print(f"  [Aviso API]: {e}")
 
@@ -188,6 +215,10 @@ def main():
     print(f"Título: {book['title']}")
     print(f"Autores: {', '.join(book['authors'])}")
     print(f"Categoría: {book['category']}")
+    print(f"Editorial: {book['publisher'] or 'No disponible'}")
+    print(f"Año: {book['year'] or 'No disponible'}")
+    print(f"Páginas: {book['pages'] or 'No disponibles'}")
+    print(f"Descripción: {'disponible' if book['description'] else 'No disponible'}")
     
     cover_path = download_cover(book['isbn'], book['cover_remote'])
     book['cover'] = cover_path
