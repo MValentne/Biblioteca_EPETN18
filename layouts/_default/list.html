@@ -168,6 +168,10 @@
           </div>
 
           <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+            <a id="modal-read" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true"
+               class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs transition opacity-50 cursor-not-allowed">
+              <span>Leer Libro</span>
+            </a>
             <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-xs transition">
               <span>Consultar en Google Libros</span>
               <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,6 +230,14 @@ function openBookModal(isbn) {
   const mainAuthor = Array.isArray(book.authors) ? book.authors[0] : (book.authors || '');
   const cleanQuery = `${book.title} ${mainAuthor}`.trim();
   linkEl.href = `https://www.google.com/search?tbm=bks&q=${encodeURIComponent(cleanQuery)}`;
+
+  const readEl = document.getElementById('modal-read');
+  readEl.href = book.pdf || '#';
+  readEl.setAttribute('aria-disabled', book.pdf ? 'false' : 'true');
+  readEl.classList.toggle('opacity-50', !book.pdf);
+  readEl.classList.toggle('cursor-not-allowed', !book.pdf);
+  readEl.classList.toggle('hover:bg-blue-800', Boolean(book.pdf));
+  readEl.onclick = book.pdf ? null : (event) => event.preventDefault();
 
   const modal = document.getElementById('book-modal');
   modal.classList.remove('hidden');

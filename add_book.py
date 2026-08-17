@@ -167,6 +167,7 @@ def save_to_hugo(book):
     pages = {book['pages']}
     description = "{desc_escaped}"
     cover = "{book['cover']}"
+    pdf = ""
 """
     with open(CONFIG_PATH, 'a', encoding='utf-8') as f:
         f.write(block)

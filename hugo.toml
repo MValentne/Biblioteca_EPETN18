@@ -23,6 +23,7 @@ timeout = '120s'
     pages = 160
     description = "Novela de estructura psicológica y existencialista sobre el pintor Juan Pablo Castel y su obsesión con María Iribarne."
     cover = "images/covers/9789500700764.jpg"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9788437604947"
@@ -34,6 +35,7 @@ timeout = '120s'
     pages = 496
     description = "La historia de la familia Buendía a lo largo de siete generaciones en el mítico pueblo de Macondo."
     cover = "images/covers/9788437604947.png"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9780131103627"
@@ -45,6 +47,7 @@ timeout = '120s'
     pages = 272
     description = "El libro canónico de referencia mundial escrito por los diseñadores originales del lenguaje de programación C."
     cover = "images/covers/9780131103627.png"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9786073837873"
@@ -56,6 +59,7 @@ timeout = '120s'
     pages = 464
     description = "Manual de estilo y buenas prácticas para la creación, refactorización y mantenimiento de software profesional."
     cover = "images/covers/9786073837873.jpg"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9788497592208"
@@ -67,6 +71,7 @@ timeout = '120s'
     pages = 352
     description = "Una de las obras maestras de la literatura distópica del siglo XX sobre la vigilancia estatal totalitaria y el Gran Hermano."
     cover = "images/covers/9788497592208.jpg"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9788445071403"
@@ -78,6 +83,7 @@ timeout = '120s'
     pages = 576
     description = "El inicio del legendario viaje de Frodo Bolsón y sus compañeros a través de la Tierra Media para destruir el Anillo de Poder."
     cover = "images/covers/9788445071403.gif"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9780140328721"
@@ -89,6 +95,7 @@ timeout = '120s'
     pages = 96
     description = "Las divertidas y astutas aventuras de un valiente zorro para alimentar a su familia burlando a tres granjeros despiadados."
     cover = "images/covers/9780140328721.jpg"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9788420685625"
@@ -100,6 +107,7 @@ timeout = '120s'
     pages = 160
     description = "El tratado militar y filosófico más influyente de la historia sobre resolución de conflictos y tácticas de liderazgo."
     cover = "images/covers/9788420685625.jpg"
+    pdf = ""
 
     [[params.libros]]
     isbn = "9789871138012"
@@ -111,3 +119,4 @@ timeout = '120s'
     pages = 192
     description = "Obra cumbre de la poesía gauchesca y el patrimonio literario tradicional argentino."
     cover = "images/covers/9789871138012.jpg"
+    pdf = ""
