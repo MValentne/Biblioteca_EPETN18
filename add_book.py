@@ -12,9 +12,38 @@ import json
 import re
 import sys
 import os
+import time
 
 CONFIG_PATH = "hugo.toml"
 COVERS_DIR = "static/images/covers"
+USER_AGENT = "Biblioteca-EPETN18/1.1 (catalogo escolar)"
+
+class MetadataUnavailable(RuntimeError):
+    """Ninguna fuente pudo devolver metadatos confiables."""
+
+def fetch_json(url, timeout=8, attempts=3):
+    """Consulta una API con backoff y respeta los límites temporales."""
+    for attempt in range(attempts):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            if error.code not in (429, 500, 502, 503, 504) or attempt == attempts - 1:
+                raise
+            retry_after = error.headers.get("Retry-After", "")
+            try:
+                delay = min(max(float(retry_after), 1), 30)
+            except ValueError:
+                delay = 2 ** attempt
+            print(f"  [Aviso API]: HTTP {error.code}; reintentando en {delay:g}s...")
+            time.sleep(delay)
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
+            if attempt == attempts - 1:
+                raise
+            delay = 2 ** attempt
+            print(f"  [Aviso API]: {error}; reintentando en {delay}s...")
+            time.sleep(delay)
 
 # Taxonomía única del catálogo. Google Books devuelve categorías libres y, a
 # menudo, jerárquicas (por ejemplo: "Juvenile Fiction / Fantasy & Magic").
@@ -80,9 +109,7 @@ def complete_from_openlibrary(book):
         return book
     try:
         url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{book['isbn']}&jscmd=data&format=json"
-        req = urllib.request.Request(url, headers={'User-Agent': 'Biblioteca-EPETN18/1.0'})
-        with urllib.request.urlopen(req, timeout=6) as response:
-            data = json.loads(response.read().decode('utf-8'))
+        data = fetch_json(url)
         info = data.get(f"ISBN:{book['isbn']}", {})
         publishers = info.get('publishers') or []
         if not book['publisher'] and publishers:
@@ -98,9 +125,7 @@ def complete_from_openlibrary(book):
 def fetch_openlibrary_info(isbn):
     """Obtiene una edición concreta cuando Google Books está limitado por cuota."""
     url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&jscmd=data&format=json"
-    req = urllib.request.Request(url, headers={'User-Agent': 'Biblioteca-EPETN18/1.0'})
-    with urllib.request.urlopen(req, timeout=6) as response:
-        info = json.loads(response.read().decode('utf-8')).get(f"ISBN:{isbn}", {})
+    info = fetch_json(url).get(f"ISBN:{isbn}", {})
     if not info:
         return None
 
@@ -125,19 +150,15 @@ def fetch_openlibrary_info(isbn):
 
 def fetch_book_info(isbn, custom_query=None):
     clean_isbn = clean_isbn_str(isbn)
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
-    
     # 1. Intentar buscar en Google Books por ISBN exacto
     url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{clean_isbn}&maxResults=10"
     if custom_query:
         url = f"https://www.googleapis.com/books/v1/volumes?q={urllib.parse.quote(custom_query)}&maxResults=10"
         
     try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=6) as response:
-            data = json.loads(response.read().decode('utf-8'))
-            if data.get('items'):
-                return complete_from_openlibrary(merge_volume_info(data['items'], clean_isbn))
+        data = fetch_json(url)
+        if data.get('items'):
+            return complete_from_openlibrary(merge_volume_info(data['items'], clean_isbn))
     except Exception as e:
         print(f"  [Aviso API]: {e}")
 
@@ -149,41 +170,9 @@ def fetch_book_info(isbn, custom_query=None):
     except Exception as e:
         print(f"  [Aviso Open Library]: {e}")
 
-    # Fallback por scraping web de Google Books si la API tiene cuota agotada
-    try:
-        gb_web = f"https://books.google.com/books?vid=ISBN{clean_isbn}"
-        req = urllib.request.Request(gb_web, headers=headers)
-        with urllib.request.urlopen(req, timeout=6) as r:
-            html = r.read().decode('utf-8', errors='ignore')
-            title_m = re.search(r'<meta property=\"og:title\" content=\"([^\"]+)\"', html)
-            title = title_m.group(1).replace(' - Google Libros', '').replace(' - Google Books', '') if title_m else f"Libro {clean_isbn}"
-            img_m = re.search(r'src=\"([^\"]+books/content\?id=[a-zA-Z0-9_\-]+[^\"]+img=1[^\"]*)\"', html)
-            cover_remote = img_m.group(1).replace('&amp;', '&') if img_m else f"https://covers.openlibrary.org/b/isbn/{clean_isbn}-L.jpg"
-            return {
-                "isbn": clean_isbn,
-                "title": title,
-                "authors": ["Biblioteca EPET N° 18"],
-                "category": "Otros",
-                "publisher": "",
-                "year": "",
-                "pages": 0,
-                "description": "Ejemplar catalogado en la Biblioteca EPET N° 18.",
-                "cover_remote": cover_remote
-            }
-    except Exception:
-        pass
-
-    return {
-        "isbn": clean_isbn,
-        "title": f"Libro {clean_isbn}",
-        "authors": ["Biblioteca EPET N° 18"],
-        "category": "Otros",
-        "publisher": "",
-        "year": "",
-        "pages": 0,
-        "description": "Ejemplar catalogado en la Biblioteca EPET N° 18.",
-        "cover_remote": f"https://covers.openlibrary.org/b/isbn/{clean_isbn}-L.jpg"
-    }
+    raise MetadataUnavailable(
+        f"No se encontraron metadatos para ISBN {clean_isbn}; no se modificó hugo.toml."
+    )
 
 def download_cover(isbn, remote_url):
     os.makedirs(COVERS_DIR, exist_ok=True)
@@ -209,19 +198,19 @@ def download_cover(isbn, remote_url):
 
 def book_block(book, pdf=""):
     authors_json = json.dumps(book['authors'], ensure_ascii=False)
-    desc_escaped = str(book['description'] or '').replace('"', '\\"').replace('\n', ' ')
+    toml_string = lambda value: json.dumps(str(value or ""), ensure_ascii=False)
     return f"""
     [[params.libros]]
     isbn = "{book['isbn']}"
-    title = "{book['title']}"
+    title = {toml_string(book['title'])}
     authors = {authors_json}
-    category = "{book['category']}"
-    publisher = "{book['publisher']}"
-    year = "{book['year']}"
+    category = {toml_string(book['category'])}
+    publisher = {toml_string(book['publisher'])}
+    year = {toml_string(book['year'])}
     pages = {book['pages'] or 0}
-    description = "{desc_escaped}"
-    cover = "{book['cover']}"
-    pdf = "{pdf}"
+    description = {toml_string(book['description'])}
+    cover = {toml_string(book['cover'])}
+    pdf = {toml_string(pdf)}
 """
 
 def save_to_hugo(book, refresh=False):
@@ -268,7 +257,12 @@ def main():
             return
     
     print(f"Consultando metadatos para ISBN: {clean_isbn}...")
-    book = fetch_book_info(isbn, query)
+    try:
+        book = fetch_book_info(isbn, query)
+    except MetadataUnavailable as error:
+        print(f"[ERROR] {error}")
+        print("Podés reintentar más tarde o pasar el título como segundo argumento.")
+        sys.exit(2)
     
     print(f"Título: {book['title']}")
     print(f"Autores: {', '.join(book['authors'])}")
