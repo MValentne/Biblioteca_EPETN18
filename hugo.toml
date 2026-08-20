@@ -22,7 +22,7 @@ timeout = '120s'
     publisher = ""
     year = "2014"
     pages = 584
-    description = ""
+    description = "Una chica universitaria conoce al misterioso Hardin Scott y se enamora perdidamente, descubriendo un mundo de pasión, secretos y traición que cambiará su vida para siempre."
     cover = "images/covers/9781476792484.jpg"
     pdf = "https://drive.google.com/file/d/149kO2axMmiWmG2akDtJBxyvi_lIt7W0F/view"
 
@@ -34,7 +34,7 @@ timeout = '120s'
     publisher = "Planeta"
     year = "2021"
     pages = 0
-    description = ""
+    description = "Una historia de segundas oportunidades donde dos almas heridas se encuentran buscando redención y amor en los momentos más inesperados de la vida."
     cover = "images/covers/9788408245872.jpg"
     pdf = "https://drive.google.com/file/d/1HnAfg55iVW6Nm2Al8qlEZF-9xJLtFYh7/view?usp=drive_link"
 
@@ -46,7 +46,7 @@ timeout = '120s'
     publisher = "SM"
     year = "2016"
     pages = 224
-    description = ""
+    description = "Dos adolescentes enfrentan desafíos emocionales mientras descubren el verdadero significado de la amistad, el coraje y los latidos del corazón."
     cover = "images/covers/9788467585889.jpg"
     pdf = "https://drive.google.com/file/d/1aqBcKXD0jbNoJahdMi8bzlOuCpQkZTtz/view?usp=drive_link"
 
@@ -58,7 +58,7 @@ timeout = '120s'
     publisher = "SM"
     year = "2013"
     pages = 200
-    description = ""
+    description = "Una historia sobre los sentimientos y emociones que surgen en la adolescencia, explorando las relaciones humanas con sensibilidad y ternura."
     cover = "images/covers/9788467563078.jpg"
     pdf = "https://drive.google.com/file/d/1Yd4sMqecx5aPLooOe_GoUE912wVsbwLT/view?usp=drive_link"
 
@@ -70,7 +70,7 @@ timeout = '120s'
     publisher = "Norma"
     year = "2008"
     pages = 222
-    description = ""
+    description = "Una colección de cuentos humorísticos y conmovedores que retratan la vida cotidiana argentina con ironía, cariño y una mirada singular."
     cover = "images/covers/9789875454897.jpg"
     pdf = "https://drive.google.com/file/d/1fGWZ-dHrlSGIvSdtLNMUV82VHGQjmGSN/view?usp=drive_link"
 
@@ -82,7 +82,7 @@ timeout = '120s'
     publisher = "Debolsillo"
     year = "2005"
     pages = 377
-    description = ""
+    description = "El testimonio conmovedor de una niña judia que durante la Segunda Guerra Mundial se ocultó del nazismo en Ámsterdam, dejando un legado de esperanza y humanidad."
     cover = "images/covers/9788497593069.jpg"
     pdf = "https://drive.google.com/file/d/1WUU4ifyw6SNBrihkrDJyi8CVezzUZmN4/view?usp=drive_link"
 
@@ -94,7 +94,7 @@ timeout = '120s'
     publisher = "Cátedra"
     year = "1986"
     pages = 255
-    description = ""
+    description = "Novela epistolar que narra la crisis de mediana edad de un oficinista y su relación extramarital, reflexionando sobre el amor, la soledad y la rutina."
     cover = "images/covers/9788437601489.jpg"
     pdf = "https://drive.google.com/file/d/17QCzdAhK-kO-2cFyd-nyXuyacmV0TRPj/view?usp=drive_link"
 
@@ -106,7 +106,7 @@ timeout = '120s'
     publisher = "Herder"
     year = "2015"
     pages = 168
-    description = ""
+    description = "El psiquiatra Viktor Frankl relata su experiencia en los campos de concentración nazis y desarrolla la logoterapia, demostrando que incluso en el sufrimiento más extremo se puede encontrar sentido a la vida."
     cover = "images/covers/9788425432026.jpg"
     pdf = "https://drive.google.com/file/d/1892_iz8YrlDLdPvIjxPd6iHZw0Zpg5m9/view?usp=drive_link"
 
@@ -118,7 +118,7 @@ timeout = '120s'
     publisher = "Nube de Tinta"
     year = "2018"
     pages = 304
-    description = ""
+    description = "Un chico descubre que puede volver invisible y aprende el poder transformador de las palabras y la importancia de ser visto por quienes nos rodean."
     cover = "images/covers/9788416588435.jpg"
     pdf = "https://drive.google.com/file/d/1MZrBK7WBgKku0XlyG0OEqZsCZJIqHDb8/view?usp=drive_link"
 
@@ -130,7 +130,7 @@ timeout = '120s'
     publisher = "Editorial Norma"
     year = "2015"
     pages = 240
-    description = ""
+    description = "Una novela juvenil sobre la amistad, la autoexploración y los secretos que nos definen, contada con una prosa delicada y poética."
     cover = "images/covers/9789875456334.jpg"
     pdf = "https://drive.google.com/file/d/19oYI-ydifZvE_4W7d2dJoMY2vTejb9FK/view?usp=drive_link"
 
@@ -142,7 +142,7 @@ timeout = '120s'
     publisher = "Nube de Tinta"
     year = "2017"
     pages = 0
-    description = ""
+    description = "Una historia sobre la autoestima, el crecimiento personal y la búsqueda de la propia identidad en un mundo que parece exigir siempre más."
     cover = "images/covers/9789871997251.jpg"
     pdf = "https://drive.google.com/file/d/1m_vQLg9Mz5soM_58n6ST85lGVjMLfLXB/view?usp=drive_link"
 
@@ -154,7 +154,7 @@ timeout = '120s'
     publisher = "Dover Publications"
     year = "1996"
     pages = 120
-    description = ""
+    description = "Dorothy, una niña de Kansas, es transportada por un tornado a la Tierra de Oz y emprende un viaje mágico junto al Espantapájaros, el Hombre de Hojalata y el León Covarde para encontrar el camino de regreso a casa."
     cover = "images/covers/9780486289687.jpg"
     pdf = "https://drive.google.com/file/d/1wHYIh8dWtDvgtlP5DHoAJHJLpvNTQ3tM/view?usp=drive_link"
 
@@ -166,7 +166,7 @@ timeout = '120s'
     publisher = "Montena"
     year = "2018"
     pages = 256
-    description = ""
+    description = "Una colección de relatos cortos que amplían el universo de Percy Jackson con aventuras de semidioses y criaturas de la mitología griega."
     cover = "images/covers/9788490439463.jpg"
     pdf = "https://drive.google.com/file/d/1Uncqq72foEAZiqz_KOifOyME9rXo5Mum/view?usp=drive_link"
 
@@ -178,7 +178,7 @@ timeout = '120s'
     publisher = "Plutón Ediciones"
     year = "2018"
     pages = 256
-    description = ""
+    description = "Los clásicos cuentos de Mowgli, el niño criado por lobos en la selva india, y sus encuentros con tigres, serpientes y otras criaturas de la naturaleza."
     cover = "images/covers/9788417079680.jpg"
     pdf = "https://drive.google.com/file/d/1k8GXUZ4TxuXrOhQMlY20bJwLOdBqEfC2/view?usp=drive_link"
 
@@ -190,7 +190,7 @@ timeout = '120s'
     publisher = "Siruela"
     year = "2020"
     pages = 1920
-    description = ""
+    description = "La epopeya china del Rey Mono, Sun Wukong, y su peligrosa travesía junto a monjes budistas para obtener las escrituras sagradas."
     cover = "images/covers/9788416120000.jpg"
     pdf = "https://drive.google.com/file/d/1hHBnZHInX0lOEz_CqPaBDYqDicmsZm45/view?usp=drive_link"
 
@@ -202,7 +202,7 @@ timeout = '120s'
     publisher = "Valdemar"
     year = "2008"
     pages = 384
-    description = ""
+    description = "Alicia cae por un agujero de conejo hacia un mundo fantástico lleno de criaturas absurdas, aventuras inesperadas y enigmas lógicos que desafían la razón."
     cover = "images/covers/9788477029724.jpg"
     pdf = "https://drive.google.com/file/d/1LqS7KIq1e0QYBZm89_ZRyXI55m8XKF25/view?usp=drive_link"
 
@@ -214,7 +214,7 @@ timeout = '120s'
     publisher = "Salamandra"
     year = "1999"
     pages = 0
-    description = ""
+    description = "La serie completa que sigue la travesía de Harry Potter desde su descubrimiento como mago hasta su enfrentamiento final con Lord Voldemort en el mundo de la magia."
     cover = "images/covers/9788478884459.jpg"
     pdf = "https://drive.google.com/file/d/11wALg8KWw5ccyabAWQfyT-aVI-haJ30T/view?usp=drive_link"
 
@@ -226,7 +226,7 @@ timeout = '120s'
     publisher = "Salamandra"
     year = "2010"
     pages = 288
-    description = ""
+    description = "Percy descubre que es un semidiós y debe enfrentar monstruos, dioses y el destino mientras busca detener una guerra entre los dioses del Olimpo."
     cover = "images/covers/9788498382367.jpg"
     pdf = "https://drive.google.com/file/d/1cZ-SsCdQZxl3BZ9Wl-1lpW3hYeLgZxu5/view?usp=drive_link"
 
@@ -238,7 +238,7 @@ timeout = '120s'
     publisher = "Salamandra"
     year = "2015"
     pages = 0
-    description = ""
+    description = "Una guía ilustrada de los héroes, monstruos y criaturas de la mitología griega dentro del universo de Percy Jackson."
     cover = "images/covers/9788415629658.jpg"
     pdf = "https://drive.google.com/file/d/1RH9_IN4Aw_8PsQCF25rF58ozETCjL6-I/view?usp=drive_link"
 
@@ -250,7 +250,7 @@ timeout = '120s'
     publisher = "Gallimard"
     year = "2017"
     pages = 0
-    description = ""
+    description = "El clásico cuento del niño que nunca crece y sus aventuras en el País de Nunca Jamás con Wendy, los Niños Perdidos y el Capitán Garfio."
     cover = "images/covers/9782075099943.jpg"
     pdf = "https://drive.google.com/file/d/1jOubH55hv-f0nHEOzslCSBT86GOgyxPm/view?usp=drive_link"
 
@@ -262,7 +262,7 @@ timeout = '120s'
     publisher = "Montena"
     year = "2020"
     pages = 0
-    description = ""
+    description = "Una historia juvenil sobre la verdad, el engaño y el amor que desafía las apariencias y enseña que a veces las mentiras pueden acercarnos más que la verdad."
     cover = "images/covers/9788418057618.jpg"
     pdf = "https://drive.google.com/file/d/1A26gfGlvcvc2YS3sQlcXcXqdfwpfcxBV/view?usp=drive_link"
 
@@ -274,7 +274,7 @@ timeout = '120s'
     publisher = "Alfaguara"
     year = "2020"
     pages = 336
-    description = ""
+    description = "Una novela que explora la amistad femenina, los secretos y las consecuencias de un misterioso suceso que cambiará la vida de tres mujeres para siempre."
     cover = "images/covers/9789877387155.jpg"
     pdf = "https://drive.google.com/file/d/1G0iprYhTptX5ufDg7loaM5jxeRpSs0vm/view?usp=drive_link"
 
@@ -286,7 +286,7 @@ timeout = '120s'
     publisher = "Páginas de Espuma"
     year = "2014"
     pages = 0
-    description = ""
+    description = "La colección definitiva de Edgar Allan Poe: relatos de misterio, horror y lo macabro que han definido el género del cuento de terror."
     cover = "images/covers/9788483933657.jpg"
     pdf = "https://drive.google.com/file/d/16XF_YgRYjCn5egZDQTEiPvgEnaxSP83q/view?usp=drive_link"
 
@@ -298,7 +298,7 @@ timeout = '120s'
     publisher = "Anaya"
     year = "1999"
     pages = 250
-    description = ""
+    description = "Sherlock Holmes investiga la leyenda de un sabueso sobrenatural que acecha a la familia Baskerville en los páramos ingleses."
     cover = "images/covers/9788420733512.jpg"
     pdf = "https://drive.google.com/file/d/1J53yzXag9F88zSTYmtC5AyRn5Rs_ae8W/view?usp=drive_link"
 
@@ -310,19 +310,19 @@ timeout = '120s'
     publisher = "Castalia"
     year = "2018"
     pages = 0
-    description = ""
+    description = "La primera novela de Sherlock Holmes, donde el genial detective y el Dr. Watson resuelven un asesinato misterioso en Londres."
     cover = "images/covers/9788497408219.jpg"
     pdf = "https://drive.google.com/file/d/1DvFmUDrepxHsttHZX5g6eAgssgSEZNww/view?usp=drive_link"
 
     [[params.libros]]
     isbn = "9789870702870"
-    title = "The Murders in the Rue Morgue / Los crímenes de la calle Morgue"
+    title = "The Murders in the Rue Morgue / Los crímenes de la calle Morgue"
     authors = ["Edgar Allan Poe"]
     category = "Literatura & Ficción"
-    publisher = "Clarín"
+    publisher = "Clarín"
     year = "2008"
     pages = 63
-    description = ""
+    description = "El cuento fundacional del género policial: C. Auguste Dupin resuelve un brutal asesinato en París usando la pura lógica."
     cover = "images/covers/9789870702870.jpg"
     pdf = "https://drive.google.com/file/d/1d-clS1O6QxP5Yz8bIjZdJR8IKHct3s5C/view?usp=drive_link"
 
@@ -334,7 +334,7 @@ timeout = '120s'
     publisher = "Transworld Ireland"
     year = "2010"
     pages = 288
-    description = ""
+    description = "Una novela noir ambientada en el bajo mundo londinense sobre un ex convicto que intenta cambiar su vida pero se ve arrastrado de nuevo al crimen."
     cover = "images/covers/9781848270886.jpg"
     pdf = "https://drive.google.com/file/d/1uj0bnygU1bhEZy-VdLlMStp56eR_pO3_/view?usp=drive_link"
 
@@ -346,7 +346,7 @@ timeout = '120s'
     publisher = "Edicions 62"
     year = "2007"
     pages = 208
-    description = ""
+    description = "Una colección de los mejores relatos de Poe, incluyendo su famosa historia de detectives y sus inquietantes cuentos de misterio."
     cover = "images/covers/9788429760026.jpg"
     pdf = "https://drive.google.com/file/d/1nahhyCaGnW9krrSdQqufNjupaNy486q9/view?usp=drive_link"
 
@@ -358,7 +358,7 @@ timeout = '120s'
     publisher = "Obelisco"
     year = "1997"
     pages = 105
-    description = ""
+    description = "Una alegoría medieval sobre un caballero que emprende una búsqueda épica para recuperar su corazón perdido y redescubrir el amor verdadero."
     cover = "images/covers/9788477206019.jpg"
     pdf = "https://drive.google.com/file/d/1BjNwhM1xTpWXkR3ibBtXCs9_Vraq3Gt8/view?usp=drive_link"
 
@@ -370,7 +370,7 @@ timeout = '120s'
     publisher = "Ediciones B Mexico"
     year = "2018"
     pages = 0
-    description = ""
+    description = "Una fábula inspiradora sobre una gaviota que se atreve a soñar más allá de las expectativas de su bandada, buscando la excelencia personal."
     cover = "images/covers/9781947783447.jpg"
     pdf = "https://drive.google.com/file/d/1ZZbSW5_YoYyJpUqUfKoJ0wMBQy-k36qV/view?usp=drive_link"
 
@@ -382,7 +382,7 @@ timeout = '120s'
     publisher = "EDICIONES OBELISCO S.L."
     year = "2009"
     pages = 112
-    description = "Source title: El arte de la guerra (Cartoné) (EXITO) (Spanish Edition)"
+    description = "El antiguo tratado chino de Sun Tzu sobre estrategia y táctica militar, ampliamente aplicado a los negocios, el liderazgo y la vida cotidiana."
     cover = "images/covers/9788497775311.jpg"
     pdf = "https://drive.google.com/file/d/1Cno2BwAgmrdyrl4WB3m8J7n4UKt75TUo/view?usp=drive_link"
 
@@ -394,7 +394,7 @@ timeout = '120s'
     publisher = "Espasa Libros"
     year = "2015"
     pages = 256
-    description = ""
+    description = "La colección de obras más importantes de Kafka, incluyendo la icónica historia de Gregor Samsa y su transformación en un insecto."
     cover = "images/covers/9788467043648.jpg"
     pdf = "https://drive.google.com/file/d/170lDgCOMl8Kv0ebsDX_UeeKEfEpDIz_u/view?usp=drive_link"
 
@@ -406,7 +406,7 @@ timeout = '120s'
     publisher = "Editorial Gredos"
     year = "2019"
     pages = 0
-    description = ""
+    description = "Los escritos personales del emperador romano Marco Aurelio sobre filosofía estoica, la autoreflección y la búsqueda de la virtud."
     cover = "images/covers/9788424938963.jpg"
     pdf = "https://drive.google.com/file/d/1cRYIUm74BrvGYVuOGVW8kuwZJuKPuFSm/view?usp=drive_link"
 
@@ -418,6 +418,6 @@ timeout = '120s'
     publisher = "Salamandra Infantil y Juvenil"
     year = "2022"
     pages = 120
-    description = ""
+    description = "Una reimaginación contemporánea inspirada en el clásico de Saint-Exupéry, explorando temas modernos como la conexión humana, la soledad y el sentido de la vida."
     cover = "images/covers/9788419275981.jpg"
     pdf = "https://drive.google.com/file/d/11hOWwIt48BIvdnhEsK3wVtVxyR7d-o4i/view?usp=drive_link"
