@@ -169,3 +169,15 @@ timeout = '120s'
     cover = "images/covers/9788483467657.jpg"
     pdf = "https://books.google.com.ar/books/about/El_informe_Pel%C3%ADcano.html?id=u5iGNwAACAAJ&redir_esc=y"
 
+
+    [[params.libros]]
+    isbn = "9780198709701"
+    title = "Crime and Punishment : (OWC Hardback)"
+    authors = ["Фёдор Достоевский", "Nicolas Pasternak Slater", "Sarah J. Young"]
+    category = "Literatura & Ficción"
+    publisher = "Oxford University Press"
+    year = "2017"
+    pages = 576
+    description = ""
+    cover = "images/covers/9780198709701.jpg"
+    pdf = ""
