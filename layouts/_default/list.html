@@ -1,7 +1,7 @@
 {{ define "main" }}
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <!-- Cabecera y Filtro de Búsqueda -->
-  <div class="mb-10 pb-6 border-b border-slate-200 flex flex-col md:flex-row md:items-end justify-between gap-5">
+  <div class="mb-10 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-5">
     <div>
       <h1 class="text-2xl sm:text-3xl font-extrabold text-[#132a13] tracking-tight">
         Catálogo Bibliográfico
@@ -19,7 +19,7 @@
                type="search" 
                placeholder="Buscar por título, autor o ISBN..." 
                autocomplete="off"
-               class="w-full pl-10 pr-9 py-2.5 bg-white border border-[#90a955] rounded-xl text-sm text-[#132a13] placeholder-[#90a955] focus:outline-none focus:ring-2 focus:ring-[#4f772d] focus:border-[#4f772d] transition shadow-xs" />
+               class="w-full pl-10 pr-9 py-2.5 bg-white rounded-xl text-sm text-[#132a13] placeholder-[#90a955] focus:outline-none focus:ring-2 focus:ring-[#4f772d] transition shadow-sm" />
         <svg class="w-4 h-4 text-[#90a955] absolute left-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
@@ -47,10 +47,10 @@
 
     {{ range $cat := $categories }}
       {{ $catBooks := where $libros "category" $cat }}
-      <section class="category-block bg-[#ecf39e] rounded-2xl border border-[#90a955] p-6 sm:p-7 shadow-xs transition" data-category="{{ $cat }}">
-        <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+      <section class="category-block bg-white rounded-2xl p-6 sm:p-7 shadow-sm transition" data-category="{{ $cat }}">
+        <div class="flex items-center justify-between pb-4 mb-6">
           <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-[#90a955] text-[#132a13] rounded-lg">
+            <div class="p-2 bg-[#ecf39e] text-[#4f772d] rounded-lg">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
               </svg>
@@ -59,7 +59,7 @@
               <h2 class="text-lg sm:text-xl font-bold text-[#132a13] leading-snug">{{ $cat }}</h2>
             </div>
           </div>
-          <span class="category-count text-xs font-semibold px-3 py-1 bg-[#90a955] text-[#132a13] rounded-full border border-[#4f772d]">
+          <span class="category-count text-xs font-semibold px-3 py-1 bg-[#ecf39e] text-[#4f772d] rounded-full">
             {{ len $catBooks }} {{ if eq (len $catBooks) 1 }}título{{ else }}títulos{{ end }}
           </span>
         </div>
@@ -67,7 +67,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
           {{ range $book := $catBooks }}
             {{ $coverUrl := $book.cover | relURL }}
-            <article class="book-card group cursor-pointer bg-[#f9faf5] rounded-xl overflow-hidden border border-[#90a955]/50 shadow-xs hover:shadow-lg hover:border-[#4f772d] transition-all duration-200 flex flex-col justify-between"
+            <article class="book-card group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between"
                  onclick="openBookModal('{{ $book.isbn }}')"
                  tabindex="0"
                  role="button"
@@ -77,7 +77,7 @@
                  data-isbn="{{ $book.isbn }}"
                  data-category="{{ $book.category }}">
               
-              <div class="w-full aspect-[2/3] bg-[#ecf39e]/60 overflow-hidden relative flex items-center justify-center border-b border-[#90a955]/30">
+              <div class="w-full aspect-[2/3] bg-[#ecf39e]/50 overflow-hidden relative flex items-center justify-center">
                 <img src="{{ $coverUrl }}" 
                      alt="Portada de {{ $book.title }}" 
                      class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300" 
@@ -95,7 +95,7 @@
                   </p>
                 </div>
                 {{ if $book.year }}
-                  <div class="mt-2 pt-2 border-t border-[#90a955]/30 flex items-center justify-between text-[11px] text-[#4f772d]">
+                  <div class="mt-2 pt-2 flex items-center justify-between text-[11px] text-[#90a955]">
                     <span>{{ $book.year }}</span>
                     {{ if $book.pages }}<span>{{ $book.pages }} págs.</span>{{ end }}
                   </div>
@@ -109,7 +109,7 @@
   </div>
 
   <!-- Estado sin resultados -->
-  <div id="no-results" class="hidden text-center py-16 bg-[#ecf39e] rounded-2xl border border-[#90a955] p-8 shadow-xs">
+  <div id="no-results" class="hidden text-center py-16 bg-white rounded-2xl p-8 shadow-sm">
     <div class="inline-flex p-3 bg-[#90a955] text-[#132a13] rounded-full mb-3">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -123,10 +123,10 @@
   </div>
 
   <!-- Modal de Detalle del Libro -->
-  <div id="book-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="bg-[#f9faf5] rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-xl relative animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto border border-[#90a955]" onclick="event.stopPropagation()">
+  <div id="book-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-[#132a13]/40 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-xl relative animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
       <button onclick="closeBookModal()" 
-               class="absolute top-4 right-4 text-[#4f772d] hover:text-[#132a13] bg-[#ecf39e] hover:bg-[#90a955] rounded-lg p-2 transition"
+               class="absolute top-4 right-4 text-[#90a955] hover:text-[#132a13] bg-[#ecf39e] hover:bg-[#ecf39e]/80 rounded-lg p-2 transition"
               aria-label="Cerrar ventana de detalles">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -135,7 +135,7 @@
 
       <div class="flex flex-col sm:flex-row gap-6">
         <div class="flex-shrink-0 flex justify-center sm:justify-start">
-          <img id="modal-cover" class="w-36 sm:w-44 h-52 sm:h-64 object-cover rounded-lg shadow-sm border border-[#90a955] bg-[#ecf39e]/50" src="" alt="Portada del libro">
+          <img id="modal-cover" class="w-36 sm:w-44 h-52 sm:h-64 object-cover rounded-lg shadow-sm bg-[#ecf39e]/50" src="" alt="Portada del libro">
         </div>
         <div class="flex-1 flex flex-col justify-between">
           <div>
@@ -143,7 +143,7 @@
             <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-[#132a13] leading-snug"></h2>
             <p id="modal-authors" class="text-sm font-medium text-[#4f772d] mt-1"></p>
 
-            <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-xs bg-[#ecf39e]/50 p-3.5 rounded-xl border border-[#90a955]/50">
+            <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-xs bg-[#ecf39e]/30 p-3.5 rounded-xl">
               <div>
                 <dt class="text-[#4f772d] font-medium">Editorial</dt>
                 <dd id="modal-publisher" class="text-[#132a13] font-semibold truncate">—</dd>
@@ -168,7 +168,7 @@
             </div>
           </div>
 
-          <div class="mt-6 pt-4 border-t border-[#90a955]/30 flex items-center justify-between gap-3">
+          <div class="mt-6 pt-4 flex items-center justify-between gap-3">
             <a id="modal-read" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true"
                class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#4f772d] text-white text-xs font-semibold rounded-lg shadow-xs transition opacity-50 cursor-not-allowed">
               <span>Leer Libro</span>
