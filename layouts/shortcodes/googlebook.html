@@ -111,7 +111,7 @@
             coverEl.parentElement.classList.add('hidden');
           }
 
-          descEl.textContent = book.description ? (book.description.substring(0, 240) + '...') : 'Sin sinopsis disponible.';
+          descEl.textContent = book.description ? (book.description.substring(0, 240) + '...') : 'Sin descripción disponible.';
 
           if (book.publisher) publisherEl.textContent = `Editorial: ${book.publisher} •`;
           if (book.publishedDate) dateEl.textContent = `Año: ${book.publishedDate.substring(0, 4)} •`;
