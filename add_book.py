@@ -305,26 +305,64 @@ def fetch_book_info(isbn, custom_query=None):
         f"No se encontraron metadatos para ISBN {clean_isbn}; no se modificó hugo.toml."
     )
 
+def _is_valid_cover(data):
+    """Descarta placeholders: GIF 1x1, PNGs tiny, y archivos muy pequeños."""
+    if len(data) < 2000:
+        return False
+    header = data[:8]
+    # GIF89a/GIF87a de 1x1 (Open Library cuando no hay portada)
+    if header[:3] == b"GIF":
+        # GIF89a header: width y height en bytes 6-7 (little-endian)
+        if len(data) >= 10:
+            width = int.from_bytes(data[6:8], "little")
+            height = int.from_bytes(data[8:10], "little")
+            if width <= 2 or height <= 2:
+                return False
+        return len(data) > 2000
+    # PNG placeholder chico (Google Books icono ~1269 bytes)
+    if header[:4] == b"\x89PNG" and len(data) < 5000:
+        return False
+    return True
+
+def _fetch_cover(url, timeout=8):
+    """Descarga una portada y la valida. Devuelve bytes o None."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = resp.read()
+            if _is_valid_cover(data):
+                return data
+    except Exception:
+        pass
+    return None
+
 def download_cover(isbn, remote_url):
     os.makedirs(COVERS_DIR, exist_ok=True)
     ext = "jpg"
     local_path = os.path.join(COVERS_DIR, f"{isbn}.{ext}")
-    
-    if os.path.exists(local_path) and os.path.getsize(local_path) > 1000:
+
+    if os.path.exists(local_path) and os.path.getsize(local_path) > 2000:
         return f"images/covers/{isbn}.{ext}"
 
-    try:
-        req = urllib.request.Request(remote_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            data = resp.read()
-            if len(data) > 500:
-                with open(local_path, 'wb') as f:
-                    f.write(data)
-                print(f"  Portada guardada ({len(data)} bytes) en {local_path}")
-                return f"images/covers/{isbn}.{ext}"
-    except Exception as e:
-        print(f"  [Aviso descarga portada]: {e}")
+    # 1. Intentar con la URL original (Google Books API thumbnail)
+    data = _fetch_cover(remote_url)
+    if data:
+        with open(local_path, "wb") as f:
+            f.write(data)
+        print(f"  Portada guardada ({len(data)} bytes) en {local_path}")
+        return f"images/covers/{isbn}.{ext}"
 
+    # 2. Fallback: Google Books content URL (no necesita API key)
+    fallback_url = f"https://books.google.com/books/content?vid=ISBN{isbn}&printsec=frontcover&img=1&zoom=2"
+    data = _fetch_cover(fallback_url)
+    if data:
+        with open(local_path, "wb") as f:
+            f.write(data)
+        print(f"  Portada guardada vía fallback ({len(data)} bytes) en {local_path}")
+        return f"images/covers/{isbn}.{ext}"
+
+    # 3. Sin portada válida: usar la URL remota (posible placeholder, pero no hay alternativa)
+    print(f"  [Aviso]: No se pudo descargar portada válida para ISBN {isbn}")
     return remote_url
 
 def book_block(book, pdf=""):
