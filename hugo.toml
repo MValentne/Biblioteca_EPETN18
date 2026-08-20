@@ -71,7 +71,7 @@ timeout = '120s'
     year = "2008"
     pages = 222
     description = ""
-    cover = "https://covers.openlibrary.org/b/id/13016058-M.jpg"
+    cover = "images/covers/9789875454897.jpg"
     pdf = "https://drive.google.com/file/d/1fGWZ-dHrlSGIvSdtLNMUV82VHGQjmGSN/view?usp=drive_link"
 
     [[params.libros]]
@@ -131,7 +131,7 @@ timeout = '120s'
     year = "2015"
     pages = 240
     description = ""
-    cover = "https://covers.openlibrary.org/b/id/11175857-M.jpg"
+    cover = "images/covers/9789875456334.jpg"
     pdf = "https://drive.google.com/file/d/19oYI-ydifZvE_4W7d2dJoMY2vTejb9FK/view?usp=drive_link"
 
     [[params.libros]]
@@ -143,7 +143,7 @@ timeout = '120s'
     year = "2017"
     pages = 0
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9789871997251-L.jpg"
+    cover = "images/covers/9789871997251.jpg"
     pdf = "https://drive.google.com/file/d/1m_vQLg9Mz5soM_58n6ST85lGVjMLfLXB/view?usp=drive_link"
 
     [[params.libros]]
@@ -203,7 +203,7 @@ timeout = '120s'
     year = "2008"
     pages = 384
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788477029724-L.jpg"
+    cover = "images/covers/9788477029724.jpg"
     pdf = "https://drive.google.com/file/d/1LqS7KIq1e0QYBZm89_ZRyXI55m8XKF25/view?usp=drive_link"
 
     [[params.libros]]
@@ -215,7 +215,7 @@ timeout = '120s'
     year = "1999"
     pages = 0
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788478884459-L.jpg"
+    cover = "images/covers/9788478884459.jpg"
     pdf = "https://drive.google.com/file/d/11wALg8KWw5ccyabAWQfyT-aVI-haJ30T/view?usp=drive_link"
 
     [[params.libros]]
@@ -227,7 +227,7 @@ timeout = '120s'
     year = "2010"
     pages = 288
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788498382367-L.jpg"
+    cover = "images/covers/9788498382367.jpg"
     pdf = "https://drive.google.com/file/d/1cZ-SsCdQZxl3BZ9Wl-1lpW3hYeLgZxu5/view?usp=drive_link"
 
     [[params.libros]]
@@ -239,7 +239,7 @@ timeout = '120s'
     year = "2015"
     pages = 0
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788415629658-L.jpg"
+    cover = "images/covers/9788415629658.jpg"
     pdf = "https://drive.google.com/file/d/1RH9_IN4Aw_8PsQCF25rF58ozETCjL6-I/view?usp=drive_link"
 
     [[params.libros]]
@@ -251,7 +251,7 @@ timeout = '120s'
     year = "2017"
     pages = 0
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9782075099943-L.jpg"
+    cover = "images/covers/9782075099943.jpg"
     pdf = "https://drive.google.com/file/d/1jOubH55hv-f0nHEOzslCSBT86GOgyxPm/view?usp=drive_link"
 
     [[params.libros]]
@@ -275,7 +275,7 @@ timeout = '120s'
     year = "2020"
     pages = 336
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9789877387155-L.jpg"
+    cover = "images/covers/9789877387155.jpg"
     pdf = "https://drive.google.com/file/d/1G0iprYhTptX5ufDg7loaM5jxeRpSs0vm/view?usp=drive_link"
 
     [[params.libros]]
@@ -287,7 +287,7 @@ timeout = '120s'
     year = "2014"
     pages = 0
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788483933657-L.jpg"
+    cover = "images/covers/9788483933657.jpg"
     pdf = "https://drive.google.com/file/d/16XF_YgRYjCn5egZDQTEiPvgEnaxSP83q/view?usp=drive_link"
 
     [[params.libros]]
@@ -299,7 +299,7 @@ timeout = '120s'
     year = "1999"
     pages = 250
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788420733512-L.jpg"
+    cover = "images/covers/9788420733512.jpg"
     pdf = "https://drive.google.com/file/d/1J53yzXag9F88zSTYmtC5AyRn5Rs_ae8W/view?usp=drive_link"
 
     [[params.libros]]
@@ -371,7 +371,7 @@ timeout = '120s'
     year = "2018"
     pages = 0
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9781947783447-L.jpg"
+    cover = "images/covers/9781947783447.jpg"
     pdf = "https://drive.google.com/file/d/1ZZbSW5_YoYyJpUqUfKoJ0wMBQy-k36qV/view?usp=drive_link"
 
     [[params.libros]]
@@ -419,5 +419,5 @@ timeout = '120s'
     year = "2022"
     pages = 120
     description = ""
-    cover = "https://covers.openlibrary.org/b/isbn/9788419275981-L.jpg"
+    cover = "images/covers/9788419275981.jpg"
     pdf = "https://drive.google.com/file/d/11hOWwIt48BIvdnhEsK3wVtVxyR7d-o4i/view?usp=drive_link"
