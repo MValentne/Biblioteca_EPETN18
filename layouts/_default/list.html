@@ -6,8 +6,9 @@
       <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
         Catálogo Bibliográfico
       </h1>
-      <p class="text-slate-600 text-sm mt-1 max-w-2xl">
-        Obras y títulos disponibles para consulta en sala y préstamo escolar.
+      <p class="text-sm mt-2 italic text-emerald-700 font-medium">
+        "Un lector vive mil vidas antes de morir. El que no lee, solo vive una."
+        <span class="not-italic text-slate-400 text-xs ml-1">— George R.R. Martin</span>
       </p>
     </div>
 
@@ -18,7 +19,7 @@
                type="search" 
                placeholder="Buscar por título, autor o ISBN..." 
                autocomplete="off"
-               class="w-full pl-10 pr-9 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition shadow-xs" />
+               class="w-full pl-10 pr-9 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition shadow-xs" />
         <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
@@ -86,7 +87,7 @@
 
               <div class="p-3 flex flex-col justify-between flex-1">
                 <div>
-                  <h3 class="font-semibold text-slate-900 text-xs sm:text-sm line-clamp-2 leading-snug group-hover:text-blue-700 transition" title="{{ $book.title }}">
+                  <h3 class="font-semibold text-slate-900 text-xs sm:text-sm line-clamp-2 leading-snug group-hover:text-emerald-700 transition" title="{{ $book.title }}">
                     {{ $book.title }}
                   </h3>
                   <p class="text-xs text-slate-500 line-clamp-1 mt-1 font-normal">
@@ -169,7 +170,7 @@
 
           <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
             <a id="modal-read" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true"
-               class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs transition opacity-50 cursor-not-allowed">
+               class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-xs transition opacity-50 cursor-not-allowed">
               <span>Leer Libro</span>
             </a>
             <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-xs transition">
@@ -236,7 +237,7 @@ function openBookModal(isbn) {
   readEl.setAttribute('aria-disabled', book.pdf ? 'false' : 'true');
   readEl.classList.toggle('opacity-50', !book.pdf);
   readEl.classList.toggle('cursor-not-allowed', !book.pdf);
-  readEl.classList.toggle('hover:bg-blue-800', Boolean(book.pdf));
+  readEl.classList.toggle('hover:bg-emerald-800', Boolean(book.pdf));
   readEl.onclick = book.pdf ? null : (event) => event.preventDefault();
 
   const modal = document.getElementById('book-modal');
