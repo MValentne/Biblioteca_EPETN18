@@ -13,3 +13,15 @@ timeout = '120s'
 
     # CATÁLOGO DE LIBROS DE LA BIBLIOTECA
     # Puedes registrar nuevos libros ejecutando: ./add_book.py <ISBN>
+
+    [[params.libros]]
+    isbn = "9781476792484"
+    title = "After (After Series, Book 1)"
+    authors = ["Anna Todd"]
+    category = "Literatura & Ficción"
+    publisher = ""
+    year = "2014"
+    pages = 584
+    description = ""
+    cover = "images/covers/9781476792484.jpg"
+    pdf = "https://drive.google.com/file/d/149kO2axMmiWmG2akDtJBxyvi_lIt7W0F/view"
