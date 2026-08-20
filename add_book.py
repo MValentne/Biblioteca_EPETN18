@@ -45,31 +45,119 @@ def fetch_json(url, timeout=8, attempts=3):
             print(f"  [Aviso API]: {error}; reintentando en {delay}s...")
             time.sleep(delay)
 
-# Taxonomía única del catálogo. Google Books devuelve categorías libres y, a
-# menudo, jerárquicas (por ejemplo: "Juvenile Fiction / Fantasy & Magic").
-# Todos esos valores se reducen a uno de estos encabezados estables.
+# Taxonomía del catálogo. Google Books devuelve categorías libres y jerárquicas
+# (ej: "Juvenile Fiction / Fantasy & Magic"). Open Library devuelve subjects
+# como strings libres (ej: "Combinatorial analysis"). Todos se reducen aquí.
 CATEGORY_RULES = (
-    ("Literatura Infantil & Juvenil", ("juvenile", "children", "infantil", "juvenil", "young adult")),
-    ("Cómics & Novela Gráfica", ("comics", "graphic novel", "manga")),
-    ("Ciencia Ficción & Fantasía", ("science fiction", "fantasy", "ciencia ficción", "fantasía", "dystopian")),
-    ("Poesía, Teatro & Clásicos", ("poetry", "poesía", "drama", "teatro", "classics", "clásicos")),
-    ("Literatura & Ficción", ("fiction", "ficción", "literature", "literatura", "novel", "novela")),
-    ("Informática & Tecnología", ("computers", "computer", "software", "programming", "informática", "technology")),
-    ("Tecnología & Ingeniería", ("engineering", "ingeniería", "technology")),
-    ("Ciencias Naturales & Física", ("science", "ciencia", "physics", "física", "biology", "biología")),
-    ("Ciencias Sociales", ("social science", "sociology", "sociología", "politics", "política", "economics", "economía")),
-    ("Historia & Crónicas", ("history", "historia", "biography", "biografía")),
-    ("Filosofía, Ensayo & Pensamiento", ("philosophy", "filosofía", "essay", "ensayo", "religion", "religión")),
-    ("Arte & Diseño", ("art", "arte", "design", "diseño", "music", "música")),
-    ("Educación & Pedagogía", ("education", "educación", "teaching", "pedagogy", "pedagogía")),
+    ("Literatura Infantil & Juvenil", (
+        "juvenile", "children", "infantil", "juvenil", "young adult",
+        "kid", "picture book", "children's fiction", "children's literature",
+    )),
+    ("Cómics & Novela Gráfica", (
+        "comics", "graphic novel", "manga", "comic",
+    )),
+    ("Ciencia Ficción & Fantasía", (
+        "science fiction", "fantasy", "ciencia ficción", "fantasía",
+        "dystopian", "speculative", "supernatural", "sci-fi",
+        "utopian", "alternate history",
+    )),
+    ("Poesía, Teatro & Clásicos", (
+        "poetry", "poesía", "drama", "teatro", "classics", "clásicos",
+        "verse", "play", "epic", "tragedy", "gaucho",
+    )),
+    ("Literatura & Ficción", (
+        "fiction", "ficción", "literature", "literatura", "novel", "novela",
+        "short stories", "cuentos", "adventure", "thriller", "mystery",
+        "romance", "suspense", "crime", "horror", "detective", "narrative",
+        "narración", "literary", "literaria",
+    )),
+    ("Informática & Tecnología", (
+        "computers", "computer science", "software", "programming",
+        "informática", "algorithms", "data structures", "machine learning",
+        "artificial intelligence", "internet", "networks", "operating system",
+        "database", "cybersecurity", "python", "java", "javascript",
+        "web development", "sistemas", "computación",
+    )),
+    ("Tecnología & Ingeniería", (
+        "engineering", "ingeniería", "electronics", "electrónica",
+        "mechanical", "mecánica", "civil", "electrical", "eléctrica",
+        "systems", "automation", "automatización", "industrial",
+    )),
+    ("Matemáticas", (
+        "mathematics", "matemáticas", "math", "algebra", "calculus",
+        "geometry", "geometría", "statistics", "estadística", "probability",
+        "combinatorial", "combinatorics", "number theory", "topology",
+        "analysis", "discrete", "discreta", "trigonometry", "trigonometría",
+    )),
+    ("Ciencias Naturales & Física", (
+        "science", "ciencia", "physics", "física", "biology", "biología",
+        "chemistry", "química", "astronomy", "astronomía", "ecology",
+        "ecología", "geology", "geología", "natural history",
+    )),
+    ("Ciencias Sociales", (
+        "social science", "sociology", "sociología", "politics", "política",
+        "economics", "economía", "anthropology", "antropología",
+        "psychology", "psicología", "communication", "comunicación",
+        "political science", "ciencias sociales",
+    )),
+    ("Historia & Crónicas", (
+        "history", "historia", "biography", "biografía", "autobiography",
+        "autobiografía", "chronicle", "crónica", "memoir", "war", "guerra",
+        "ancient", "medieval", "colonial", "historical",
+    )),
+    ("Filosofía, Ensayo & Pensamiento", (
+        "philosophy", "filosofía", "essay", "ensayo", "religion", "religión",
+        "ethics", "ética", "logic", "lógica", "spirituality", "espiritualidad",
+        "theology", "teología", "pensamiento",
+    )),
+    ("Arte & Diseño", (
+        "art", "arte", "design", "diseño", "music", "música",
+        "architecture", "arquitectura", "photography", "fotografía",
+        "film", "cinema", "painting", "drawing",
+    )),
+    ("Educación & Pedagogía", (
+        "education", "educación", "teaching", "pedagogy", "pedagogía",
+        "learning", "aprendizaje", "school", "escuela", "curriculum",
+    )),
+    ("Salud & Medicina", (
+        "medicine", "medicina", "health", "salud", "nutrition", "nutrición",
+        "anatomy", "anatomía", "clinical", "clínica", "nursing", "enfermería",
+    )),
+    ("Derecho", (
+        "law", "derecho", "legal", "jurisprudence", "jurisprudencia",
+        "constitution", "constitución", "criminal", "penal", "civil law",
+    )),
+    ("Administración & Negocios", (
+        "business", "negocios", "management", "administración", "marketing",
+        "finance", "finanzas", "entrepreneurship", "emprendimiento",
+        "leadership", "liderazgo", "accounting", "contabilidad",
+    )),
 )
 
-def normalize_category(raw_category):
-    """Convierte cualquier categoría de Google Books al estándar del catálogo."""
-    value = re.sub(r"\s+", " ", str(raw_category or "")).strip().lower()
-    for canonical, keywords in CATEGORY_RULES:
-        if any(keyword in value for keyword in keywords):
-            return canonical
+def normalize_category(raw_categories):
+    """Mapea categorías/subjects de cualquier API al estándar del catálogo.
+
+    Acepta un string o una lista de strings (como devuelven Google Books y
+    Open Library). Prueba CADA entrada en orden hasta encontrar el primer match.
+    Si ninguno hace match retorna el primer valor recibido en Title Case
+    (más legible y dinámico que siempre poner 'Otros').
+    """
+    if isinstance(raw_categories, str):
+        candidates = [raw_categories] if raw_categories.strip() else []
+    elif isinstance(raw_categories, (list, tuple)):
+        candidates = [str(c).strip() for c in raw_categories if c and str(c).strip()]
+    else:
+        candidates = []
+
+    for raw in candidates:
+        value = re.sub(r"\s+", " ", raw).strip().lower()
+        for canonical, keywords in CATEGORY_RULES:
+            if any(keyword in value for keyword in keywords):
+                return canonical
+
+    # Sin match en las reglas: usar la primera categoría recibida tal cual
+    if candidates:
+        return candidates[0].strip().title()
     return "Otros"
 
 def clean_isbn_str(raw):
@@ -87,13 +175,17 @@ def merge_volume_info(volumes, isbn):
     def first(field, default=""):
         return next((info.get(field) for info in infos if has_value(info.get(field))), default)
 
-    categories = next((info.get('categories') for info in infos if info.get('categories')), [])
+    # Recolectar TODAS las categorías de todos los volúmenes para maximizar el match
+    all_categories = []
+    for info in infos:
+        all_categories.extend(info.get('categories') or [])
+
     image_links = next((info.get('imageLinks') for info in infos if info.get('imageLinks')), {})
     return {
         "isbn": isbn,
         "title": first('title', f"Libro {isbn}"),
         "authors": first('authors', ["Autor desconocido"]),
-        "category": normalize_category(categories[0] if categories else ""),
+        "category": normalize_category(all_categories),
         "publisher": first('publisher'),
         "year": str(first('publishedDate'))[:4],
         "pages": first('pageCount', 0),
@@ -102,15 +194,49 @@ def merge_volume_info(volumes, isbn):
                           f"https://books.google.com/books/content?vid=ISBN{isbn}&printsec=frontcover&img=1&zoom=1")
     }
 
+def _fetch_openlibrary_subjects(isbn):
+    """Obtiene subjects desde la API de ediciones y, si son escasos, también desde Works.
+
+    Retorna (subjects: list[str], edition_info: dict).
+    """
+    subjects = []
+    info = {}
+
+    # 1. API de ediciones (jscmd=data) — subjects con nombre legible
+    try:
+        url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&jscmd=data&format=json"
+        data = fetch_json(url)
+        info = data.get(f"ISBN:{isbn}", {})
+        subjects += [s.get('name', '') for s in info.get('subjects', []) if s.get('name')]
+    except Exception:
+        pass
+
+    # 2. Si hay pocos subjects, enriquecer desde la API de Works
+    if len(subjects) < 3:
+        works = info.get('works', [])
+        if works:
+            work_key = works[0].get('key', '')  # ej: "/works/OL1234W"
+            if work_key:
+                try:
+                    work_data = fetch_json(f"https://openlibrary.org{work_key}.json")
+                    for s in work_data.get('subjects', []):
+                        if isinstance(s, str):
+                            subjects.append(s)
+                        elif isinstance(s, dict):
+                            subjects.append(s.get('name', ''))
+                except Exception:
+                    pass
+
+    return [s for s in subjects if s], info
+
 def complete_from_openlibrary(book):
-    """Completa campos que Google Books deja vacíos, sin reemplazar datos válidos."""
-    missing = not all((book['publisher'], book['year'], book['pages'], book['description']))
-    if not missing:
+    """Completa campos que Google Books deja vacíos; también mejora 'Otros'."""
+    needs_meta = not all((book['publisher'], book['year'], book['pages'], book['description']))
+    needs_category = book['category'] == "Otros"
+    if not needs_meta and not needs_category:
         return book
     try:
-        url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{book['isbn']}&jscmd=data&format=json"
-        data = fetch_json(url)
-        info = data.get(f"ISBN:{book['isbn']}", {})
+        subjects, info = _fetch_openlibrary_subjects(book['isbn'])
         publishers = info.get('publishers') or []
         if not book['publisher'] and publishers:
             book['publisher'] = publishers[0].get('name', '')
@@ -118,28 +244,33 @@ def complete_from_openlibrary(book):
             book['pages'] = info['number_of_pages']
         if not book['year']:
             book['year'] = str(info.get('publish_date', ''))[-4:]
+        # Mejorar categoría si sigue siendo 'Otros' y tenemos subjects de OL
+        if needs_category and subjects:
+            candidate = normalize_category(subjects)
+            if candidate != "Otros":
+                book['category'] = candidate
+                print(f"  Categoría mejorada desde Open Library: {candidate}")
     except Exception as e:
         print(f"  [Aviso fuente alternativa]: {e}")
     return book
 
 def fetch_openlibrary_info(isbn):
     """Obtiene una edición concreta cuando Google Books está limitado por cuota."""
-    url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&jscmd=data&format=json"
-    info = fetch_json(url).get(f"ISBN:{isbn}", {})
+    subjects, info = _fetch_openlibrary_subjects(isbn)
     if not info:
         return None
 
     authors = [a.get('name', '').strip() for a in info.get('authors', []) if a.get('name')]
     publishers = [p.get('name', '').strip() for p in info.get('publishers', []) if p.get('name')]
-    subjects = [s.get('name', '') for s in info.get('subjects', [])]
     description = info.get('notes') or info.get('description') or ""
     if isinstance(description, dict):
         description = description.get('value', '')
+
     return {
         "isbn": isbn,
         "title": info.get('title') or f"Libro {isbn}",
         "authors": authors or ["Autor desconocido"],
-        "category": normalize_category(subjects[0] if subjects else ""),
+        "category": normalize_category(subjects),
         "publisher": publishers[0] if publishers else "",
         "year": str(info.get('publish_date', ''))[-4:],
         "pages": info.get('number_of_pages') or 0,
@@ -213,16 +344,47 @@ def book_block(book, pdf=""):
     pdf = {toml_string(pdf)}
 """
 
+def _find_book_block(content, isbn):
+    """Devuelve (start, end) del bloque [[params.libros]] que contiene el ISBN.
+
+    Estrategia: busca la línea `isbn = "ISBN"`, luego localiza el
+    [[params.libros]] inmediatamente anterior y el [[params.libros]] siguiente
+    (o el final del archivo). Esto evita que el regex retroceda y capture
+    bloques de libros anteriores.
+    """
+    isbn_pattern = re.compile(rf'(?m)^\s*isbn\s*=\s*"{re.escape(isbn)}"')
+    isbn_match = isbn_pattern.search(content)
+    if not isbn_match:
+        return None, None
+
+    header_pattern = re.compile(r'(?m)^\s*\[\[params\.libros\]\]')
+
+    # Buscar el [[params.libros]] que viene JUSTO ANTES del ISBN
+    block_start = None
+    for m in header_pattern.finditer(content, 0, isbn_match.start()):
+        block_start = m.start()  # el último header antes del ISBN
+
+    if block_start is None:
+        return None, None  # ISBN encontrado pero sin header (no debería pasar)
+
+    # El bloque termina donde empieza el SIGUIENTE [[params.libros]] o el EOF
+    next_header = header_pattern.search(content, isbn_match.end())
+    block_end = next_header.start() if next_header else len(content)
+
+    return block_start, block_end
+
 def save_to_hugo(book, refresh=False):
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    pattern = re.compile(rf'(?ms)^\s*\[\[params\.libros\]\].*?^\s*isbn\s*=\s*"{re.escape(book["isbn"])}".*?(?=^\s*\[\[params\.libros\]\]|\Z)')
-    existing = pattern.search(content)
+    block_start, block_end = _find_book_block(content, book['isbn'])
+    existing = block_start is not None
+
     if existing and refresh:
-        pdf_match = re.search(r'(?m)^\s*pdf\s*=\s*"(.*)"\s*$', existing.group(0))
+        existing_block = content[block_start:block_end]
+        pdf_match = re.search(r'(?m)^\s*pdf\s*=\s*"(.*)"\s*$', existing_block)
         pdf = pdf_match.group(1) if pdf_match else ""
-        content = content[:existing.start()] + book_block(book, pdf) + content[existing.end():]
+        content = content[:block_start] + book_block(book, pdf) + content[block_end:]
         with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
             f.write(content)
         print(f"Metadatos del ISBN {book['isbn']} actualizados en {CONFIG_PATH}")
@@ -235,6 +397,7 @@ def save_to_hugo(book, refresh=False):
     with open(CONFIG_PATH, 'a', encoding='utf-8') as f:
         f.write(book_block(book))
     print(f"Libro '{book['title']}' registrado con éxito en {CONFIG_PATH}")
+
 
 def main():
     refresh = len(sys.argv) >= 2 and sys.argv[1] == '--refresh'

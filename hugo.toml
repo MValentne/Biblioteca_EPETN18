@@ -123,13 +123,13 @@ timeout = '120s'
 
     [[params.libros]]
     isbn = "0471091383"
-    title = "Combinatorial Theory"
-    authors = ["Biblioteca EPET N° 18"]
-    category = "Otros"
-    publisher = ""
-    year = ""
-    pages = 0
-    description = "Ejemplar catalogado en la Biblioteca EPET N° 18."
+    title = "Combinatorial theory"
+    authors = ["Hall, Marshall", "Marshall Hall"]
+    category = "Matemáticas"
+    publisher = "Wiley"
+    year = "1986"
+    pages = 440
+    description = "Bibliography: p. 428-435.\n\"A Wiley-Interscience publication.\"\nIncludes index."
     cover = "images/covers/0471091383.jpg"
     pdf = "https://doc-14-ao-apps-viewer.googleusercontent.com/viewer/secure/pdf/375bq42p55anh8ff2jse5qbrgmqq0uga/qrpaf8b5c7givt09ck0pogdfhlkf1k6q/1786988400000/drive/04123123620518041759/ACFrOgABZKv8zXB0XXN2pifAEIzALSML2WAQG4CsMe9m4ULHFuFiJNJGcKxVy5ApCkRXJMNAuv_fAYwGbUF0aJzPW1VKzlQGTFTgD1YMz37XsznqkpoBCK-X3AxlX7iGP6LR2ylcLkZc2uAC_7ypgln9tqv_Vf2dosXUz4q4UgSg-7LkJXh87PJi5cFJaRnHBQJMpcvP115XcaaC1c2CMB3rzvxKzFEXzn9hVkVFh2mUEkyoYdW003DpfCnZG0ws95oywc7dNrT7zg7dAyY8M0A-0osWTbBNML4ymSZElLSJ-IUK1GI5WIHDUcud9JU27TYqFOeSGLXFSr2rBci3zmGrr_XR08U4uLyN3seRIpF9dv_ozD_1xq5-BC_l_PITKbsAy9WrSFruAQwjh_5B7b0_GLydntu0KsLKU99WTg5_GMZV4eLQXna0c-Rq5WCWHgzfvjcLn4BC9_rr3v_O?authuser=0&print=true&nonce=9te688gi22714&user=04123123620518041759&hash=hkb8vg25tn2bjdcpp2r062jf0095otf1"
 
@@ -137,7 +137,7 @@ timeout = '120s'
     isbn = "9583311251"
     title = "La esencia de la lógica de programación"
     authors = ["Biblioteca EPET N° 18"]
-    category = "Otros"
+    category = "Informática & Tecnología"
     publisher = ""
     year = ""
     pages = 0
@@ -149,7 +149,7 @@ timeout = '120s'
     isbn = "9783140464079"
     title = "Le Petit Prince. ( Französische Ausgabe). (Lernmaterialien)"
     authors = ["Antoine de Saint-Exupéry"]
-    category = "Otros"
+    category = "Literatura & Ficción"
     publisher = "Schöningh im Westermann"
     year = "1991"
     pages = 96
@@ -161,10 +161,11 @@ timeout = '120s'
     isbn = "9788483467657"
     title = "El informe pelícano"
     authors = ["John Grisham"]
-    category = "Otros"
+    category = "Literatura & Ficción"
     publisher = "Debolsillo"
     year = "2008"
     pages = 464
     description = "Source title: El informe pelícano (Spanish Edition)"
-    cover = "https://covers.openlibrary.org/b/id/13496210-M.jpg"
+    cover = "images/covers/9788483467657.jpg"
     pdf = "https://books.google.com.ar/books/about/El_informe_Pel%C3%ADcano.html?id=u5iGNwAACAAJ&redir_esc=y"
+
