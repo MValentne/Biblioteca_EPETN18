@@ -25,3 +25,399 @@ timeout = '120s'
     description = ""
     cover = "images/covers/9781476792484.jpg"
     pdf = "https://drive.google.com/file/d/149kO2axMmiWmG2akDtJBxyvi_lIt7W0F/view"
+
+    [[params.libros]]
+    isbn = "9788408245872"
+    title = "Cuando no queden más estrellas que contar"
+    authors = ["María Martínez"]
+    category = "Literatura & Ficción"
+    publisher = "Planeta"
+    year = "2021"
+    pages = 0
+    description = ""
+    cover = "images/covers/9788408245872.jpg"
+    pdf = "https://drive.google.com/file/d/1HnAfg55iVW6Nm2Al8qlEZF-9xJLtFYh7/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788467585889"
+    title = "Latidos"
+    authors = ["Francesc Miralles", "Javier Ruescas"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "SM"
+    year = "2016"
+    pages = 224
+    description = ""
+    cover = "images/covers/9788467585889.jpg"
+    pdf = "https://drive.google.com/file/d/1aqBcKXD0jbNoJahdMi8bzlOuCpQkZTtz/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788467563078"
+    title = "Pulsaciones"
+    authors = ["Francesc Miralles", "Javier Ruescas"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "SM"
+    year = "2013"
+    pages = 200
+    description = ""
+    cover = "images/covers/9788467563078.jpg"
+    pdf = "https://drive.google.com/file/d/1Yd4sMqecx5aPLooOe_GoUE912wVsbwLT/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9789875454897"
+    title = "El jamón del sánguche"
+    authors = ["Graciela Bialet"]
+    category = "Literatura & Ficción"
+    publisher = "Norma"
+    year = "2008"
+    pages = 222
+    description = ""
+    cover = "https://covers.openlibrary.org/b/id/13016058-M.jpg"
+    pdf = "https://drive.google.com/file/d/1fGWZ-dHrlSGIvSdtLNMUV82VHGQjmGSN/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788497593069"
+    title = "El diario de Ana Frank"
+    authors = ["Anne Frank"]
+    category = "Historia & Crónicas"
+    publisher = "Debolsillo"
+    year = "2005"
+    pages = 377
+    description = ""
+    cover = "images/covers/9788497593069.jpg"
+    pdf = "https://drive.google.com/file/d/1WUU4ifyw6SNBrihkrDJyi8CVezzUZmN4/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788437601489"
+    title = "La tregua"
+    authors = ["Mario Benedetti"]
+    category = "Literatura & Ficción"
+    publisher = "Cátedra"
+    year = "1986"
+    pages = 255
+    description = ""
+    cover = "images/covers/9788437601489.jpg"
+    pdf = "https://drive.google.com/file/d/17QCzdAhK-kO-2cFyd-nyXuyacmV0TRPj/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788425432026"
+    title = "El hombre en busca de sentido"
+    authors = ["Viktor E. Frankl"]
+    category = "Filosofía, Ensayo & Pensamiento"
+    publisher = "Herder"
+    year = "2015"
+    pages = 168
+    description = ""
+    cover = "images/covers/9788425432026.jpg"
+    pdf = "https://drive.google.com/file/d/1892_iz8YrlDLdPvIjxPd6iHZw0Zpg5m9/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788416588435"
+    title = "Invisible"
+    authors = ["Eloy Moreno"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Nube de Tinta"
+    year = "2018"
+    pages = 304
+    description = ""
+    cover = "images/covers/9788416588435.jpg"
+    pdf = "https://drive.google.com/file/d/1MZrBK7WBgKku0XlyG0OEqZsCZJIqHDb8/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9789875456334"
+    title = "La lluvia sabe por qué"
+    authors = ["María Fernanda Heredia"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Editorial Norma"
+    year = "2015"
+    pages = 240
+    description = ""
+    cover = "https://covers.openlibrary.org/b/id/11175857-M.jpg"
+    pdf = "https://drive.google.com/file/d/19oYI-ydifZvE_4W7d2dJoMY2vTejb9FK/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9789871997251"
+    title = "Nada es suficiente"
+    authors = ["Lydia Carreras"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Nube de Tinta"
+    year = "2017"
+    pages = 0
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9789871997251-L.jpg"
+    pdf = "https://drive.google.com/file/d/1m_vQLg9Mz5soM_58n6ST85lGVjMLfLXB/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9780486289687"
+    title = "El maravilloso mago de Oz"
+    authors = ["L. Frank Baum"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Dover Publications"
+    year = "1996"
+    pages = 120
+    description = ""
+    cover = "images/covers/9780486289687.jpg"
+    pdf = "https://drive.google.com/file/d/1wHYIh8dWtDvgtlP5DHoAJHJLpvNTQ3tM/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788490439463"
+    title = "Percy Jackson y la vara de Hermes y otras historias de semidioses"
+    authors = ["Rick Riordan"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Montena"
+    year = "2018"
+    pages = 256
+    description = ""
+    cover = "images/covers/9788490439463.jpg"
+    pdf = "https://drive.google.com/file/d/1Uncqq72foEAZiqz_KOifOyME9rXo5Mum/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788417079680"
+    title = "El libro de la selva"
+    authors = ["Rudyard Kipling"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Plutón Ediciones"
+    year = "2018"
+    pages = 256
+    description = ""
+    cover = "images/covers/9788417079680.jpg"
+    pdf = "https://drive.google.com/file/d/1k8GXUZ4TxuXrOhQMlY20bJwLOdBqEfC2/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788416120000"
+    title = "Viaje al oeste: Las aventuras del Rey Mono"
+    authors = ["Anónimo chino del siglo XVI"]
+    category = "Poesía, Teatro & Clásicos"
+    publisher = "Siruela"
+    year = "2020"
+    pages = 1920
+    description = ""
+    cover = "images/covers/9788416120000.jpg"
+    pdf = "https://drive.google.com/file/d/1hHBnZHInX0lOEz_CqPaBDYqDicmsZm45/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788477029724"
+    title = "Alicia en el País de las Maravillas / Al otro lado del espejo"
+    authors = ["Lewis Carroll"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Valdemar"
+    year = "2008"
+    pages = 384
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788477029724-L.jpg"
+    pdf = "https://drive.google.com/file/d/1LqS7KIq1e0QYBZm89_ZRyXI55m8XKF25/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788478884459"
+    title = "Harry Potter saga completa"
+    authors = ["J.K. Rowling"]
+    category = "Ciencia Ficción & Fantasía"
+    publisher = "Salamandra"
+    year = "1999"
+    pages = 0
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788478884459-L.jpg"
+    pdf = "https://drive.google.com/file/d/11wALg8KWw5ccyabAWQfyT-aVI-haJ30T/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788498382367"
+    title = "Percy Jackson y los Dioses del Olimpo"
+    authors = ["Rick Riordan"]
+    category = "Ciencia Ficción & Fantasía"
+    publisher = "Salamandra"
+    year = "2010"
+    pages = 288
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788498382367-L.jpg"
+    pdf = "https://drive.google.com/file/d/1cZ-SsCdQZxl3BZ9Wl-1lpW3hYeLgZxu5/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788415629658"
+    title = "Percy Jackson y los héroes griegos"
+    authors = ["Rick Riordan"]
+    category = "Ciencia Ficción & Fantasía"
+    publisher = "Salamandra"
+    year = "2015"
+    pages = 0
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788415629658-L.jpg"
+    pdf = "https://drive.google.com/file/d/1RH9_IN4Aw_8PsQCF25rF58ozETCjL6-I/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9782075099943"
+    title = "Peter Pan"
+    authors = ["J.M. Barrie"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Gallimard"
+    year = "2017"
+    pages = 0
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9782075099943-L.jpg"
+    pdf = "https://drive.google.com/file/d/1jOubH55hv-f0nHEOzslCSBT86GOgyxPm/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788418057618"
+    title = "Perfectos mentirosos"
+    authors = ["Álex Mírez"]
+    category = "Literatura & Ficción"
+    publisher = "Montena"
+    year = "2020"
+    pages = 0
+    description = ""
+    cover = "images/covers/9788418057618.jpg"
+    pdf = "https://drive.google.com/file/d/1A26gfGlvcvc2YS3sQlcXcXqdfwpfcxBV/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9789877387155"
+    title = "Catedrales"
+    authors = ["Claudia Piñeiro"]
+    category = "Literatura & Ficción"
+    publisher = "Alfaguara"
+    year = "2020"
+    pages = 336
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9789877387155-L.jpg"
+    pdf = "https://drive.google.com/file/d/1G0iprYhTptX5ufDg7loaM5jxeRpSs0vm/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788483933657"
+    title = "Cuentos completos"
+    authors = ["Edgar Allan Poe"]
+    category = "Literatura & Ficción"
+    publisher = "Páginas de Espuma"
+    year = "2014"
+    pages = 0
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788483933657-L.jpg"
+    pdf = "https://drive.google.com/file/d/16XF_YgRYjCn5egZDQTEiPvgEnaxSP83q/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788420733512"
+    title = "El sabueso de los Baskerville"
+    authors = ["Arthur Conan Doyle"]
+    category = "Literatura & Ficción"
+    publisher = "Anaya"
+    year = "1999"
+    pages = 250
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788420733512-L.jpg"
+    pdf = "https://drive.google.com/file/d/1J53yzXag9F88zSTYmtC5AyRn5Rs_ae8W/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788497408219"
+    title = "Estudio en escarlata"
+    authors = ["Arthur Conan Doyle"]
+    category = "Literatura & Ficción"
+    publisher = "Castalia"
+    year = "2018"
+    pages = 0
+    description = ""
+    cover = "images/covers/9788497408219.jpg"
+    pdf = "https://drive.google.com/file/d/1DvFmUDrepxHsttHZX5g6eAgssgSEZNww/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9789870702870"
+    title = "The Murders in the Rue Morgue / Los crímenes de la calle Morgue"
+    authors = ["Edgar Allan Poe"]
+    category = "Literatura & Ficción"
+    publisher = "Clarín"
+    year = "2008"
+    pages = 63
+    description = ""
+    cover = "images/covers/9789870702870.jpg"
+    pdf = "https://drive.google.com/file/d/1d-clS1O6QxP5Yz8bIjZdJR8IKHct3s5C/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9781848270886"
+    title = "London Boulevard"
+    authors = ["Ken Bruen"]
+    category = "Literatura & Ficción"
+    publisher = "Transworld Ireland"
+    year = "2010"
+    pages = 288
+    description = ""
+    cover = "images/covers/9781848270886.jpg"
+    pdf = "https://drive.google.com/file/d/1uj0bnygU1bhEZy-VdLlMStp56eR_pO3_/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788429760026"
+    title = "La carta robada y otros relatos"
+    authors = ["Edgar Allan Poe"]
+    category = "Literatura & Ficción"
+    publisher = "Edicions 62"
+    year = "2007"
+    pages = 208
+    description = ""
+    cover = "images/covers/9788429760026.jpg"
+    pdf = "https://drive.google.com/file/d/1nahhyCaGnW9krrSdQqufNjupaNy486q9/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788477206019"
+    title = "El Caballero de la Armadura Oxidada"
+    authors = ["Robert Fisher"]
+    category = "Ciencia Ficción & Fantasía"
+    publisher = "Obelisco"
+    year = "1997"
+    pages = 105
+    description = ""
+    cover = "images/covers/9788477206019.jpg"
+    pdf = "https://drive.google.com/file/d/1BjNwhM1xTpWXkR3ibBtXCs9_Vraq3Gt8/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9781947783447"
+    title = "Juan Salvador Gaviota / Jonathan Livingston Seagull"
+    authors = ["Richard Bach"]
+    category = "Literatura & Ficción"
+    publisher = "Ediciones B Mexico"
+    year = "2018"
+    pages = 0
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9781947783447-L.jpg"
+    pdf = "https://drive.google.com/file/d/1ZZbSW5_YoYyJpUqUfKoJ0wMBQy-k36qV/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788497775311"
+    title = "El arte de la guerra"
+    authors = ["Sun Tzu"]
+    category = "Filosofía, Ensayo & Pensamiento"
+    publisher = "EDICIONES OBELISCO S.L."
+    year = "2009"
+    pages = 112
+    description = "Source title: El arte de la guerra (Cartoné) (EXITO) (Spanish Edition)"
+    cover = "images/covers/9788497775311.jpg"
+    pdf = "https://drive.google.com/file/d/1Cno2BwAgmrdyrl4WB3m8J7n4UKt75TUo/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788467043648"
+    title = "La metamorfosis y otros relatos"
+    authors = ["Franz Kafka"]
+    category = "Poesía, Teatro & Clásicos"
+    publisher = "Espasa Libros"
+    year = "2015"
+    pages = 256
+    description = ""
+    cover = "images/covers/9788467043648.jpg"
+    pdf = "https://drive.google.com/file/d/170lDgCOMl8Kv0ebsDX_UeeKEfEpDIz_u/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788424938963"
+    title = "Meditaciones"
+    authors = ["Marco Aurelio"]
+    category = "Filosofía, Ensayo & Pensamiento"
+    publisher = "Editorial Gredos"
+    year = "2019"
+    pages = 0
+    description = ""
+    cover = "images/covers/9788424938963.jpg"
+    pdf = "https://drive.google.com/file/d/1cRYIUm74BrvGYVuOGVW8kuwZJuKPuFSm/view?usp=drive_link"
+
+    [[params.libros]]
+    isbn = "9788419275981"
+    title = "El nuevo viaje de El Principito"
+    authors = ["Eloy Moreno"]
+    category = "Literatura Infantil & Juvenil"
+    publisher = "Salamandra Infantil y Juvenil"
+    year = "2022"
+    pages = 120
+    description = ""
+    cover = "https://covers.openlibrary.org/b/isbn/9788419275981-L.jpg"
+    pdf = "https://drive.google.com/file/d/11hOWwIt48BIvdnhEsK3wVtVxyR7d-o4i/view?usp=drive_link"
